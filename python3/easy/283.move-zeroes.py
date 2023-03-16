@@ -10,17 +10,7 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        pointer = 0
-        length = len(nums)
-        if length == 1: return
-        for i in range(length):
-            if nums[i] == 0:
-                continue
-            if i != pointer:
-                nums[pointer] = nums[i]
-            pointer += 1
-        for i in range(pointer, length):
-            nums[i] = 0
+        nums[:] = [n for n in nums if not n == 0] + [0] * nums.count(0)
 
         
 # @lc code=end
