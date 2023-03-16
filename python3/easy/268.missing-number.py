@@ -7,8 +7,7 @@
 # @lc code=start
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
-        n = len(nums)
-        return int(n * (n+1) / 2 - sum(nums))
+        return (set(range(len(nums)+1)) - set(nums)).pop()
 
         
 # @lc code=end
