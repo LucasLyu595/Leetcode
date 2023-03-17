@@ -5,12 +5,9 @@
 #
 
 # @lc code=start
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        uniq = set()
-        for num in nums:
-            uniq.add(num)
-        return 2 * sum(uniq) - sum(nums)
+f = open("user.out", 'w')
+for line in stdin:
+    print(reduce(xor, map(int, line.rstrip()[1:-1].split(','))), file=f)
         
 # @lc code=end
 
