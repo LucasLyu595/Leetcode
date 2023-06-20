@@ -7,16 +7,13 @@
 # @lc code=start
 class Solution:
     def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -> int:
-        boxTypes.sort(key=lambda x: -x[1])
-        res = 0
+        freq, res = [0] * 1001, 0
         for box in boxTypes:
-            if truckSize <= 0:
-                break
-            if truckSize > box[0]:
-                res += box[0] * box[1]
-            else:
-                res += truckSize * box[1]
-            truckSize -= box[0]
+            freq[box[1]] += box[0]
+        for i in range(1000, 0, -1):
+            res += min(truckSize, freq[i]) * i
+            truckSize -= freq[i]
+            if truckSize <= 0: break
         return res
 
         
