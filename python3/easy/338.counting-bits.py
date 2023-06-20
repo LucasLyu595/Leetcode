@@ -8,9 +8,9 @@
 class Solution:
     def countBits(self, num: int) -> List[int]:
         counter = [0]
-        while len(counter) < num+1:
-            counter.extend([i+1 for i in counter])
-        return counter[:num+1]
+        for i in range(1, num+1):
+            counter.append(counter[i >> 1] + i % 2)
+        return counter
         
 # @lc code=end
 
