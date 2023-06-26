@@ -15,18 +15,32 @@ class Solution:
     def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
         if not root:
             return False
-        return self.findInSet(root, set(), k)
+        inOrder = []
+        self.inOrderTraverse(root, inOrder)
+        l, r = 0, len(inOrder) - 1
+        while l < r:
+            sum = inOrder[l] + inOrder[r]
+            if sum == k:
+                return True
+            if sum < k:
+                l += 1
+            else:
+                r -= 1
+        return False
     
-    def findInSet(self, node: Optional[TreeNode], nodeSet: set, k: int) -> bool:
+    def inOrderTraverse(self, node: Optional[TreeNode], list: list):
         if not node:
-            return False
-        compliment = k - node.val
-        if compliment in nodeSet:
-            return True
-        nodeSet.add(node.val)
-        return self.findInSet(node.left, nodeSet, k) or self.findInSet(node.right, nodeSet, k)
+            return
+        self.inOrderTraverse(node.left, list)
+        list.append(node.val)
+        self.inOrderTraverse(node.right, list)
         
 
         
 # @lc code=end
+
+# Accepted
+# 423/423 cases passed (101 ms)
+# Your runtime beats 35.68 % of python3 submissions
+# Your memory usage beats 29.65 % of python3 submissions (22.6 MB)
 
