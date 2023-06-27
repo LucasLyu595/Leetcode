@@ -15,8 +15,10 @@ class Solution:
             s2 = stones.pop()
             diff = s1 - s2
             if diff > 0:
-                index = bisect.bisect_left(stones, diff)
-                stones.insert(index, diff)
+                for i in range(len(stones) + 1):
+                    if i == len(stones) or stones[i] >= diff:
+                        stones.insert(i, diff)
+                        break
         return 0
         
 # @lc code=end
