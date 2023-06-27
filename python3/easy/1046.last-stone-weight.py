@@ -7,19 +7,11 @@
 # @lc code=start
 class Solution:
     def lastStoneWeight(self, stones: List[int]) -> int:
-        stones.sort()
-        while stones:
-            s1 = stones.pop()
-            if not stones:
-                return s1
-            s2 = stones.pop()
-            diff = s1 - s2
-            if diff > 0:
-                for i in range(len(stones) + 1):
-                    if i == len(stones) or stones[i] >= diff:
-                        stones.insert(i, diff)
-                        break
-        return 0
+        h = [-x for x in stones]
+        heapq.heapify(h)
+        while len(h) > 1 and h[0] != 0:
+            heapq.heappush(h, heapq.heappop(h) - heapq.heappop(h))
+        return -h[0]
         
 # @lc code=end
 
