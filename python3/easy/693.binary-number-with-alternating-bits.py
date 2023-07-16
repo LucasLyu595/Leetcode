@@ -7,12 +7,10 @@
 # @lc code=start
 class Solution:
     def hasAlternatingBits(self, n: int) -> bool:
-        mod, tmp = 1 - n % 2, n >> 1
-        while tmp > 0:
-            if mod != tmp % 2:
-                return False
-            mod = 1 - mod
-            tmp >>= 1
+        n, cur = divmod(n, 2)
+        while n:
+            if cur == n % 2: return False
+            n, cur = divmod(n, 2)
         return True
         
 # @lc code=end
