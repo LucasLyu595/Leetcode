@@ -7,11 +7,9 @@
 # @lc code=start
 class Solution:
     def hasAlternatingBits(self, n: int) -> bool:
-        n, cur = divmod(n, 2)
-        while n:
-            if cur == n % 2: return False
-            n, cur = divmod(n, 2)
-        return True
+        bits = bin(n)
+        return all(bits[i] != bits[i+1]
+                   for i in range(len(bits) - 1))
         
 # @lc code=end
 
