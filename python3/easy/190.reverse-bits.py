@@ -7,9 +7,13 @@
 # @lc code=start
 class Solution:
     def reverseBits(self, n: int) -> int:
-        oribin='{0:032b}'.format(n) # int -> string
-        reversebin=oribin[::-1]
-        return int(reversebin,2)
+        res = 0
+        for _ in range(31):
+            res += n & 1
+            res <<= 1
+            n >>= 1
+        return res + n
+
         
 # @lc code=end
 
