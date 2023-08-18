@@ -12,20 +12,19 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def dfs(self, root: TreeNode, pre: str, res: List[str]):
-        if not root.left and not root.right:
-            res.append(pre+str(root.val))
-        if root.left:
-            self.dfs(root.left, pre+str(root.val)+"->", res)
-        if root.right:
-            self.dfs(root.right, pre+str(root.val)+"->", res)
-
-
     def binaryTreePaths(self, root: Optional[TreeNode]) -> List[str]:
         if not root:
             return root
         res = []
-        self.dfs(root, "", res)
+        stack = [(root, str(root.val))]
+        while stack:
+            node, path = stack.pop()
+            if not node.left and not node.right:
+                res.append(path)
+            if node.left:
+                stack.append((node.left, path+'->'+str(node.left.val)))
+            if node.right:
+                stack.append((node.right, path+'->'+str(node.right.val)))
         return res
         
         
