@@ -7,14 +7,12 @@
 # @lc code=start
 class Solution:
     def pivotIndex(self, nums: List[int]) -> int:
-        total = sum(nums)
-        tmp = 0
-        if total - nums[0] == 0:
-            return 0
-        for i in range(1, len(nums)):
-            tmp += nums[i - 1]
-            if tmp * 2 == total - nums[i]:
+        left, right = 0, sum(nums)
+        for i, ele in enumerate(nums):
+            right -= ele
+            if left == right:
                 return i
+            left += ele
         return -1
                 
         
