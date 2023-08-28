@@ -6,28 +6,13 @@
 
 # @lc code=start
 class Solution:
-    def toArrayForm(self, num: int) -> List[int]:
-        res = []
-        while num:
-            res.append(num % 10)
-            num = num // 10
-        return res[::-1]
-    
     def addToArrayForm(self, num: List[int], k: int) -> List[int]:
-        k = self.toArrayForm(k)
-        if len(k) > len(num):
-            k, num = num, k
-        res = []
-        carry = 0
+        for i in range(len(num) - 1, -1, -1):
+            k, num[i] = divmod(num[i] + k, 10)
         while k:
-            tmp = k.pop() + num.pop() + carry
-            res.append(tmp % 10)
-            carry = tmp // 10
-        while carry:
-            tmp = (0 if not num else num.pop()) + carry
-            res.append(tmp % 10)
-            carry = tmp // 10
-        return num + res[::-1]
+            k, a = divmod(k, 10)
+            num = [a] + num
+        return num
 
 
         
