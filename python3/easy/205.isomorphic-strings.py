@@ -7,21 +7,7 @@
 # @lc code=start
 class Solution:
     def isIsomorphic(self, s: str, t: str) -> bool:
-        dic = {}
-        for i in range(len(s)):
-            if s[i] in dic:
-                if dic[s[i]] != t[i]:
-                    return False
-            else:
-                dic[s[i]] = t[i]
-        dic = {}
-        for i in range(len(s)):
-            if t[i] in dic:
-                if dic[t[i]] != s[i]:
-                    return False
-            else:
-                dic[t[i]] = s[i]
-        return True
+        return len(set(s)) == len(set(t)) == len(set(zip(s, t)))
 
 
         
