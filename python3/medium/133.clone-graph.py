@@ -17,9 +17,9 @@ class Solution:
     def cloneGraph(self, node: 'Node') -> 'Node':
         if not node:
             return node
-        map, visited, queue = dict(), set(), deque([node])
-        while queue:
-            n = queue.popleft()
+        map, visited, stack = dict(), set(), deque([node])
+        while stack:
+            n = stack.pop()
             if n in visited:
                 continue
             visited.add(n)
@@ -29,7 +29,7 @@ class Solution:
                 if neighbor not in map:
                     map[neighbor] = Node(neighbor.val)
                 map[n].neighbors.append(map[neighbor])
-                queue.append(neighbor)
+                stack.append(neighbor)
         return map[node]
         
 # @lc code=end
