@@ -14,23 +14,22 @@ class Node:
 """
 
 class Solution:
-    def dfs(self, node, map, visited) -> None:
-        if node in visited:
-            return
-        visited.add(node)
-        if node not in map:
-            map[node] = Node(node.val)
-        for neighbor in node.neighbors:
-            if neighbor not in map:
-                map[neighbor] = Node(neighbor.val)
-            map[node].neighbors.append(map[neighbor])
-            self.dfs(neighbor, map, visited)
-    
     def cloneGraph(self, node: 'Node') -> 'Node':
         if not node:
             return node
-        map, visited = dict(), set()
-        self.dfs(node, map, visited)
+        map, visited, queue = dict(), set(), deque([node])
+        while queue:
+            n = queue.popleft()
+            if n in visited:
+                continue
+            visited.add(n)
+            if n not in map:
+                map[n] = Node(n.val)
+            for neighbor in n.neighbors:
+                if neighbor not in map:
+                    map[neighbor] = Node(neighbor.val)
+                map[n].neighbors.append(map[neighbor])
+                queue.append(neighbor)
         return map[node]
         
 # @lc code=end
