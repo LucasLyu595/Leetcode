@@ -12,21 +12,17 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def helper(self, node: Optional[TreeNode]) -> None:
-        if not node:
-            return
-        self.helper(node.left)
-        self.k -= 1
-        if self.k == 0:
-            self.res = node.val
-            return
-        self.helper(node.right)
-
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
-        self.k = k
-        self.res = None
-        self.helper(root)
-        return self.res
+        stack = []
+        while root or stack:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            k -= 1
+            if k == 0:
+                return root.val
+            root = root.right
         
 # @lc code=end
 
