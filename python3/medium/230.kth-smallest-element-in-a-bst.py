@@ -12,17 +12,21 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
-        def mid_iter(res: List[int], root: Optional[TreeNode]) -> None:
-            if root is None:
-                return
-            mid_iter(res, root.left)
-            res.append(root.val)
-            mid_iter(res, root.right)
+    def helper(self, node: Optional[TreeNode]) -> None:
+        if not node:
+            return
+        self.helper(node.left)
+        self.k -= 1
+        if self.k == 0:
+            self.res = node.val
+            return
+        self.helper(node.right)
 
-        res = []
-        mid_iter(res, root)
-        return res[k-1]
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        self.k = k
+        self.res = None
+        self.helper(root)
+        return self.res
         
 # @lc code=end
 
