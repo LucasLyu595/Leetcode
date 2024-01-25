@@ -7,15 +7,20 @@
 # @lc code=start
 class Solution:
     def countSubstrings(self, s: str) -> int:
-        num = len(s)
-        def isSubPal(i: int, j: int) -> int:
-            if i < 0 or j >= num: return 0
-            if s[i] != s[j]: return 0
-            return 1 + isSubPal(i-1, j+1)
-        
-        odd = sum([isSubPal(i, i) for i in range(num)])
-        even = sum([isSubPal(i, i+1) for i in range(num-1)])
-        return odd + even
+        i, n = 0, len(s)
+        res = 0
+        while i < n:
+            lower, higher = i - 1, i
+            while higher < n - 1 and s[higher] == s[higher+1]:
+                higher += 1
+            res += (higher - lower) * (higher - lower + 1) // 2
+            i = higher + 1
+            higher += 1
+            while lower >=0 and higher < n and s[lower] == s[higher]:
+                lower -= 1
+                higher += 1
+                res += 1
+        return res
         
         
 # @lc code=end
