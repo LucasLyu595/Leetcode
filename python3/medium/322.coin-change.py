@@ -7,16 +7,17 @@
 # @lc code=start
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        dp = [float('inf')] * (amount + 1)
-        dp[0] = 0
-
-        for coin in coins:
-            for i in range(coin, amount+1):
-                dp[i] = min(dp[i], dp[i - coin] + 1)
-        return dp[amount] if dp[amount] != float('inf') else -1
-    
-# Your runtime beats 86.47 % of python3 submissions
-# Your memory usage beats 79.85 % of python3 submissions (16.9 MB)
+        q = deque([(amount, 0)])
+        visited = set()
+        while q:
+            left, num = q.popleft()
+            if not left:
+                return num
+            for coin in coins:
+                if left - coin >= 0 and left - coin not in visited:
+                    q.append((left - coin, num + 1))
+                    visited.add(left - coin)
+        return -1
         
             
         
