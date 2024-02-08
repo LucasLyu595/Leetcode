@@ -7,30 +7,20 @@
 # @lc code=start
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        n = len(s)
-        def startWith(i: int, word: str) -> bool:
-            for j in range(len(word)):
-                if word[j] != s[i+j]:
-                    return False
+        wordSet = set(wordDict)
+        possibleIndices = [-1]
+
+        for i in range(len(s)):
+            for possibleIndex in reversed(possibleIndices):
+
+                if s[possibleIndex+1:i+1] in wordSet:
+                    possibleIndices.append(i)
+                    break
+        
+        if possibleIndices[-1] == len(s) - 1:
             return True
-            
-        @lru_cache(None)
-        def dp(i: int) -> bool:
-            prefixLenth = []
-            for word in wordDict:
-                if i + len(word) <= n and startWith(i, word):
-                    prefixLenth.append(len(word))
-            if len(prefixLenth) == 0:
-                return False
-            prefixLenth.sort(reverse=True)
-            for size in prefixLenth:
-                if i + size == n:
-                    return True
-            return not all([not dp(i+size) for size in prefixLenth])
-        return dp(0)
-    
-# Your runtime beats 86.16 % of python3 submissions
-# Your memory usage beats 76.94 % of python3 submissions (16.7 MB)
+        else:
+            return False
 
         
 # @lc code=end
