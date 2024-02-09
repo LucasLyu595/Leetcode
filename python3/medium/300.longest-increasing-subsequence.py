@@ -8,22 +8,22 @@
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
         sub = [nums[0]]
-        
         for num in nums[1:]:
-            if num > sub[-1]:
-                sub.append(num)
-            else:
-                # Find the first element in sub that is greater than or equal to num
-                i = 0
-                while num > sub[i]:
-                    i += 1
-                sub[i] = num
+            i = bisect_left(sub, num)
 
+            # If num is greater than any element in sub
+            if i == len(sub):
+                sub.append(num)
+            
+            # Otherwise, replace the first element in sub greater than or equal to num
+            else:
+                sub[i] = num
+        
         return len(sub)
     
 
-# Your runtime beats 85.11 % of python3 submissions
-# Your memory usage beats 92.64 % of python3 submissions (16.8 MB)
+# Your runtime beats 92.25 % of python3 submissions
+# Your memory usage beats 85.71 % of python3 submissions (17 MB)
             
         
 # @lc code=end
