@@ -8,7 +8,13 @@
 from math import factorial
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
-        return factorial(m + n - 2) // factorial(n - 1) // factorial(m - 1)
+        dp = [1] + [0] * (n-1)
+        
+        for _ in range(m):
+            for j in range (1, n):
+                dp[j] += dp[j-1]
+        
+        return dp[-1]
         
 # @lc code=end
 
