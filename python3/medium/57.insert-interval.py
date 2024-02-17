@@ -7,35 +7,20 @@
 # @lc code=start
 class Solution:
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        start, end = [], []
-        for a, b in intervals:
-            start.append(a)
-            end.append(b)
-        s, e = newInterval
-        s_index, e_index = bisect.bisect_left(start, s), bisect.bisect_right(end, e)
-
-        start, interval, end = [], [], []
-        if s_index < 1:
-            interval.append(s)
-        else:
-            if intervals[s_index - 1][1] < s:
-                start = intervals[:s_index]
-                interval.append(s)
+        cpintervals = intervals + [newInterval]
+        cpintervals.sort(key = lambda i : i[0])
+        res = [cpintervals[0]]
+        for s2, e2 in cpintervals[1:]:
+            e1 = res[-1][1]
+            if s2 <= e1:
+                res[-1][1] = max(res[-1][1], e2)
             else:
-                start = intervals[:s_index - 1]
-                interval.append(intervals[s_index - 1][0])
+                res.append([s2, e2])
 
-        if e_index == len(intervals):
-            interval.append(e)
-        else:
-            if intervals[e_index][0] > e:
-                end = intervals[e_index:]
-                interval.append(e)
-            else:
-                end = intervals[e_index+1:]
-                interval.append(intervals[e_index][1])
+        return res
     
-        return start + [interval] + end
+# Your runtime beats 92.05 % of python3 submissions
+# Your memory usage beats 88.44 % of python3 submissions (19.9 MB)
         
 # @lc code=end
 
