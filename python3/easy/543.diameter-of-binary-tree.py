@@ -12,17 +12,15 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    @cache
-    def getdepth(self, root: Optional[TreeNode]) -> int:
-        if not root: return -1
-        if not root.left and not root.right: return 0
-        return max(self.getdepth(root.right), self.getdepth(root.left))+1
-
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
-        if not root: return 0
-        if not root.left and not root.right: return 0
-        return max(self.diameterOfBinaryTree(root.left), self.diameterOfBinaryTree(root.right), self.getdepth(root.left) + self.getdepth(root.right) + 2)
-        
-        
+        res = 0
+        def longest(node: Optional[TreeNode]) -> int:
+            if not node: return 0
+            nonlocal res
+            leftpath, rightpath = longest(node.left), longest(node.right)
+            res = max(res, leftpath + rightpath)
+            return max(leftpath, rightpath) + 1
+        longest(root)
+        return res
 # @lc code=end
 
