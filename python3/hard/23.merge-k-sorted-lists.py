@@ -10,29 +10,20 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-from queue import PriorityQueue
+import heapq
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        class Wrapper():
-            def __init__(self, node):
-                self.node = node
-            def __lt__(self, other):
-                return self.node.val < other.node.val
-        
-        head = point = ListNode(0)
-        q = PriorityQueue()
-        for l in lists:
-            if l:
-                q.put(Wrapper(l))
-        while not q.empty():
-            node = q.get().node
-            point.next = node
-            point = point.next
-            node = node.next
+        h = [(l.val, idx) for idx, l in enumerate(lists) if l]
+        heapq.heapify(h)
+        head = cur = ListNode(None)
+        while h:
+            val, idx = heapq.heappop(h)
+            cur.next = ListNode(val)
+            cur = cur.next
+            node = lists[idx] = lists[idx].next
             if node:
-                q.put(Wrapper(node))
+                heapq.heappush(h, (node.val, idx))
         return head.next
-
         
 # @lc code=end
 
