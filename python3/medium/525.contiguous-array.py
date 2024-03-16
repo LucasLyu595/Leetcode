@@ -8,21 +8,19 @@
 class Solution:
     def findMaxLength(self, nums: List[int]) -> int:
         n = len(nums)
-        left, right = {}, {}
+        first = {}
         prefix = 0
-        left[0] = -1
+        first[0] = -1
+        res = 0
         for i in range(n):
             if 0 == nums[i]:
                 prefix -= 1
             else:
                 prefix += 1
-            if prefix not in left:
-                left[prefix] = i
+            if prefix not in first:
+                first[prefix] = i
             else:
-                right[prefix] = i
-        res = 0
-        for key in right:
-            res = max(res, right[key] - left[key]) 
+                res = max(res, i - first[prefix])
         return res
         
 
