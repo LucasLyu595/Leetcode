@@ -7,16 +7,15 @@
 # @lc code=start
 class Solution:
     def findMinArrowShots(self, points: List[List[int]]) -> int:
-        points.sort(key=lambda i: i[0])
-        prev = points[0][1]
-        res = 0
-        for start, end in points[1:]:
-            if prev >= start:
-                prev = min(prev, end)
-            else:
+        if not points:
+            return 0
+        points.sort(key=lambda i: i[1])
+        res, last = 0, float('-inf')
+        for start, end in points:
+            if last < start:
                 res += 1
-                prev = end
-        return res + 1
+                last = end
+        return res 
         
 # @lc code=end
 
