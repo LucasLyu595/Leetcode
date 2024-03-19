@@ -9,25 +9,15 @@ import heapq
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
         counter = Counter(tasks)
-        numbers = []
-        heapq.heapify(numbers)
+        max_freq, max_count = 0, 1
         for key in counter:
-            heapq.heappush(numbers, -counter[key])
-        res = 0
-        cycle = n + 1
-        while numbers:
-            cycle = n + 1
-            tmp = []
-            while cycle > 0 and numbers:
-                cur = -heapq.heappop(numbers)
-                cycle -= 1
-                cur -= 1
-                if cur > 0:
-                    tmp.append(cur)
-            for fre in tmp:
-                heapq.heappush(numbers, -fre)
-            res += n + 1
-        return res - cycle
+            if max_freq < counter[key]:
+                max_freq = counter[key]
+                max_count = 1
+            elif max_freq == counter[key]:
+                max_count += 1
+        return max(len(tasks), (n + 1) * (max_freq-1) + max_count)
+        
 
 
 
