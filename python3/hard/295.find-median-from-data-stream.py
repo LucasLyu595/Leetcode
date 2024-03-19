@@ -5,28 +5,25 @@
 #
 
 # @lc code=start
-import bisect
+import heapq
 class MedianFinder:
 
     def __init__(self) -> None:
-        self.array = []
-        self.n = 0
-        
+        self.heap_first = []
+        self.heap_last = []
+
 
     def addNum(self, num: int) -> None:
-        index = bisect.bisect_left(self.array, num)
-        self.array.insert(index, num)
-        self.n += 1
-
+        heapq.heappush(self.heap_first, -num)
+        heapq.heappush(self.heap_last, -heapq.heappop(self.heap_first))
+        if len(self.heap_last) - len(self.heap_first) > 1:
+            heapq.heappush(self.heap_first, -heapq.heappop(self.heap_last))
 
 
     def findMedian(self) -> float:
-        if self.n & 1:
-            return self.array[self.n // 2]
-        return (self.array[self.n // 2 - 1] + self.array[self.n // 2]) / 2
-
-
-        
+        if len(self.heap_first) == len(self.heap_last):
+            return 0.5 * (self.heap_last[0] - self.heap_first[0])
+        return self.heap_last[0]
 
 
 # Your MedianFinder object will be instantiated and called as such:
