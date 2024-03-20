@@ -12,19 +12,25 @@
 #         self.next = next
 class Solution:
     def mergeInBetween(self, list1: ListNode, a: int, b: int, list2: ListNode) -> ListNode:
-        left, right = list1, list1
-        for i in range(b+1):
-            right = right.next
-            i += 1
-            if i > b-a+2:
-                left = left.next
-        tail, tail_next = list2, list2.next
-        while tail_next:
-            tail = tail.next
-            tail_next = tail.next
-        left.next = list2
-        tail.next = right
-        return list1
+        start = ListNode()
+        end = list1
+
+        # Set start to node a - 1 and end to node b
+        for index in range (b):
+            if index == a - 1:
+                start = end
+            end = end.next
+
+        # Connect the start node to list2
+        start.next = list2
+
+        # Find the tail of list2
+        while (list2.next is not None):
+            list2 = list2.next
+        # Set the tail of list2 to end.next
+        list2.next = end.next
+        end.next = None
         
+        return list1
 # @lc code=end
 
