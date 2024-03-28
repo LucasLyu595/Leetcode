@@ -9,11 +9,13 @@ import bisect
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
         n = len(numbers)
-        for i in range(n):
-            num = target - numbers[i]
-            idx = bisect.bisect_left(numbers, num)
-            if idx < n and num == numbers[idx] and i != idx:
-                return sorted([i+1, idx+1])
+        left, right = 0, n - 1
+        while target != numbers[left] + numbers[right]:
+            if target > numbers[left] + numbers[right]:
+                left += 1
+            else:
+                right -= 1
+        return [left+1, right+1]
         
 # @lc code=end
 
