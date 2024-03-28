@@ -5,25 +5,22 @@
 #
 
 # @lc code=start
+from collections import Counter
 class Solution:
     def maxSubarrayLength(self, nums: List[int], k: int) -> int:
-        counter = {}
-        target = 0
-        left = 0
-        counter[nums[0]] = 1
-        res = 0
-        for right, num in enumerate(nums):
-            while not target:
-                counter[nums[left]] -= 1
-                if counter.get(nums[left]) <= k:
-                    target = 0
-                left += 1
-            counter[num] = counter.get(num, 0) + 1
-            if counter[num] > k:
-                target = num
-                res = max(res, right - left)
-        return res
-
+        frequency = Counter()
+        start = 0
+        unqualified = 0
+        for num in nums:
+            frequency[num] += 1
+            if k + 1 == frequency[num]:
+                unqualified += 1
+            if unqualified:
+                frequency[nums[start]] -= 1
+                if frequency[nums[start]] == k:
+                    unqualified -= 1
+                start += 1
+        return len(nums) - start
 
         
 # @lc code=end
