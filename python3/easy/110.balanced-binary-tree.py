@@ -11,19 +11,20 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-from collections import deque
 class Solution:
-    @cache
-    def getHeight(self, root: Optional[TreeNode]) -> int:
-        if not root:
-            return 0
-        return max(self.getHeight(root.right), self.getHeight(root.left)) + 1
-    
-
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
-        if not root:
-            return True
-        return abs(self.getHeight(root.right) - self.getHeight(root.left)) <= 1 and self.isBalanced(root.right) and self.isBalanced(root.left)
+        def helper(root: Optional[TreeNode]) -> (bool, int):
+            if not root:
+                return True, -1
+            leftBalanced, leftHeight = helper(root.left)
+            if not leftBalanced:
+                return False, 0
+            rightBalanced, rightHeight = helper(root.right)
+            if not rightBalanced:
+                return False, 0
+            return (abs(leftHeight - rightHeight) < 2), 1 + max(leftHeight, rightHeight)
+        return helper(root)[0]
+
         
 # @lc code=end
 
