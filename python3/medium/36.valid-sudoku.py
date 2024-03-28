@@ -8,35 +8,32 @@
 from itertools import product
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
-        for line in board:
-            tmp = set()
-            for number in line:
-                if '.' == number:
-                    continue
-                if number in tmp:
-                    return False
-                tmp.add(number)
-        for i in range(9):
-            tmp = set()
-            for j in range(9):
-                local = board[j][i]
-                if '.' == local:
-                    continue
-                if local in tmp:
-                    return False
-                tmp.add(local)
-        for i in range(1, 8, 3):
-            for j in range(1, 8, 3):
-                tmp = set()
-                for x, y in product([-1,0,1], [-1,0,1]):
-                    local = board[i+x][j+y]
-                    if '.' == local:
-                        continue
-                    if local in tmp:
-                        return False
-                    tmp.add(local)
-        return True
+        m, n = len(board), len(board[0])
+        row = [0] * m
+        col = [0] * n
+        box = [0] * (n * m // 9)
 
+        for i in range(m):
+            for j in range(n):
+                tmp = board[i][j]
+                if '.' == tmp:
+                    continue
+                pos = int(tmp)
+                mask = 1 << pos
+                if row[i] & mask:
+                    return False
+                row[i] |= mask
+
+                if col[j] & mask:
+                    return False
+                col[j] |= mask
+
+                idx = (i // 3) * (m // 3) + j // 3
+                if box[idx] & mask:
+                    return False
+                box[idx] |= mask
+
+        return True
 
         
 # @lc code=end
