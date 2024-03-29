@@ -7,20 +7,18 @@
 # @lc code=start
 class Solution:
     def countSubarrays(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        indices = []
-        maxNum = 0
-        res = 0
-        for i in range(n):
-            if nums[i] > maxNum:
-                maxNum = nums[i]
-                indices = [i]
-                res = 0
-            elif nums[i] == maxNum:
-                indices.append(i)
-            if len(indices) >= k:
-                res += indices[-k] + 1
-        return res
+        max_element = max(nums)
+        ans = start = max_elements_in_window = 0
+
+        for end in range(len(nums)):
+            if nums[end] == max_element:
+                max_elements_in_window += 1
+            while max_elements_in_window == k:
+                if nums[start] == max_element:
+                    max_elements_in_window -= 1
+                start += 1
+            ans += start
+        return ans
 
 
 # @lc code=end
