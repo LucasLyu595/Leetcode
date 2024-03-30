@@ -8,24 +8,20 @@
 class Solution:
     def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
         frequency = {}
-        n = len(s)
         ans = 0
-        left = 0
-        for right in range(n):
-            curFreq = frequency.get(s[right], 0) + 1
+        for i in range(len(s)):
+            curFreq = frequency.get(s[i], 0) + 1
             if 1 == curFreq:
                 k -= 1
-            frequency[s[right]] = curFreq
-            while k < 0:
-                frequency[s[left]] -= 1
-                if 0 == frequency[s[left]]:
-                    frequency.pop(s[left])
+            frequency[s[i]] = curFreq
+            if k >= 0:
+                ans += 1
+            else:
+                frequency[s[i-ans]] -= 1
+                if not frequency[s[i-ans]]:
+                    frequency.pop(s[i-ans])
                     k += 1
-                left += 1
-            if not k:
-                ans = max(ans, right - left + 1)
-        if k:
-            ans = right - left + 1
+
         return ans
 
         
