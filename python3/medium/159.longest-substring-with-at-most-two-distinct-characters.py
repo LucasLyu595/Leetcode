@@ -5,23 +5,18 @@
 #
 
 # @lc code=start
-from collections import Counter
 class Solution:
     def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
-        n = len(s)
-        frequency = Counter()
+        lastMap = {}
         ans = 0
         left = 0
         numChar = 2
-        for right in range(n):
-            frequency[right] += 1
-            if 1 == frequency[right]:
-                numChar -= 1
-            while numChar < 0:
-                frequency[left] -= 1
-                if 0 == frequency[left]:
-                    numChar += 1
-                left += 1
+        for right in range(len(s)):
+            lastMap[s[right]] = right
+            while numChar < len(lastMap):
+                idx = min(lastMap.values())
+                lastMap.pop(s[idx])
+                left = idx + 1
             ans = max(ans, right - left + 1)
         return ans
 
