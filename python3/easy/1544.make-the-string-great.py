@@ -5,21 +5,17 @@
 #
 
 # @lc code=start
-from collections import deque
 class Solution:
     def makeGood(self, s: str) -> str:
-        res = deque()
-        difference = ord('a') - ord('A')
+        s = [c for c in s]
+        end = 0
         for i in range(len(s)):
-            if not res:
-                res.append(ord(s[i]))
-                continue
-            cur = ord(s[i])
-            if abs(res[-1] - cur) == difference:
-                res.pop()
-                continue
-            res.append(cur)
-        return "".join(chr(i) for i in res)
+            if end > 0 and abs(ord(s[i]) - ord(s[end-1])) == 32:
+                end -= 1
+            else:
+                s[end] = s[i]
+                end += 1
+        return "".join(s[:end])
 
         
 # @lc code=end
