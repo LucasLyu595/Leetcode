@@ -7,18 +7,19 @@
 # @lc code=start
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
-        toRemove = []
+        ans = list(s)
         left = []
-        n = len(s)
-        for i in range(n):
+        for i in range(len(s)):
             if s[i] == '(':
                 left.append(i)
             elif s[i] == ')':
                 if not left:
-                    toRemove.append(i)
+                    ans[i] = ''
                 else:
                     left.pop()
-        return ''.join(s[i] for i in range(n) if i not in toRemove and i not in left)
+        for i in left:
+            ans[i] = ''
+        return ''.join(ans)
 
         
 # @lc code=end
