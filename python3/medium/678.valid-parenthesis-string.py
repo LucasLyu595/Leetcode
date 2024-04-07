@@ -7,26 +7,22 @@
 # @lc code=start
 class Solution:
     def checkValidString(self, s: str) -> bool:
-        star: List[int] = []
-        left: List[int] = []
-        for i in range(len(s)):
-            if '(' == s[i]:
-                left.append(i)
-            elif '*' == s[i]:
-                star.append(i)
-            elif ')' == s[i]:
-                if left:
-                    left.pop()
-                elif star:
-                    star.pop()
-                else:
-                    return False
-        if not len(left):
-            return True
-        if len(left) > len(star):
-            return False
-        for i in range(-1, -len(left)-1, -1):
-            if left[i] > star[i]:
+        open, close = 0, 0
+        n = len(s)
+        for i in range(n):
+            left = s[i]
+            if '(' == left or '*' == left:
+                open += 1
+            else:
+                open -= 1
+            if open < 0:
+                return False
+            right = s[n - i - 1]
+            if ')' == right or '*' == right:
+                close += 1
+            else:
+                close -= 1
+            if close < 0:
                 return False
         return True
 
