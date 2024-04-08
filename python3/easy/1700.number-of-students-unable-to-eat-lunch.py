@@ -7,16 +7,25 @@
 # @lc code=start
 class Solution:
     def countStudents(self, students: List[int], sandwiches: List[int]) -> int:
-        difference = students.count(0) - sandwiches.count(0)
-        if not difference:
-            return 0
-        def findKEle(array: List[int], element: int, k: int) -> int:
-            for i in range(-1, -len(array) - 1, -1):
-                if array[i] == element:
-                    k -= 1
-                if 0 == k:
-                    return -i
-            return -1
-        return findKEle(sandwiches, int(difference > 0), abs(difference))
+        zeros, ones = 0, 0
+        for sandwich in students:
+            if 0 == sandwich:
+                zeros += 1
+            else:
+                ones += 1
+        for i in range(len(sandwiches)):
+            sandwich = sandwiches[i]
+            if 0 == sandwich:
+                if 0 == zeros:
+                    return ones
+                zeros -= 1
+            else:
+                if 0 == ones:
+                    return zeros
+                ones -= 1
+        return 0     
+
+                
+
 # @lc code=end
 
