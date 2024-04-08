@@ -7,19 +7,22 @@
 # @lc code=start
 class Solution:
     def verifyPreorder(self, preorder: List[int]) -> bool:
-        min_limit = -inf
-        stack = []
-        
-        for num in preorder:
-            while stack and stack[-1] < num:
-                min_limit = stack.pop()
-                
-            if num <= min_limit:
-                return False
+        i = 0
+        def helper(min_limit: int , max_limit: int):
+            nonlocal i
+            if i == len(preorder):
+                return True
             
-            stack.append(num)
-        
-        return True
+            root = preorder[i]
+            if not min_limit < root < max_limit:
+                return False
+
+            i += 1
+            left = helper(min_limit, root)
+            right = helper(root, max_limit)
+            return left or right
+            
+        return helper(-inf, inf)
         
 
         
