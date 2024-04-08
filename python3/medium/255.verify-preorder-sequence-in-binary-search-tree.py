@@ -7,20 +7,19 @@
 # @lc code=start
 class Solution:
     def verifyPreorder(self, preorder: List[int]) -> bool:
-        def check(start:int, end: int, midValue: int) -> bool:
-            if start >= end:
-                return True
-            flag = -1
-            for i in range(start, end+1):
-                if flag != -1 and preorder[i] < midValue:
-                    return False
-                if flag == -1 and preorder[i] > midValue:
-                    flag = i
-                    break
-            if -1 == flag:
-                return check(start+1, end, preorder[start])
-            return check(start+1, flag-1, preorder[start]) and check(flag+1, end, preorder[flag])
-        return check(1, len(preorder)-1, preorder[0])
+        min_limit = -inf
+        stack = []
+        
+        for num in preorder:
+            while stack and stack[-1] < num:
+                min_limit = stack.pop()
+                
+            if num <= min_limit:
+                return False
+            
+            stack.append(num)
+        
+        return True
         
 
         
