@@ -6,24 +6,21 @@
 
 # @lc code=start
 class Solution:
-    def trap(self, heights: List[int]) -> int:
-        top = []
-        tmp = 0
-        for height in heights:
-            if height > tmp:
-                tmp = height
-            top.append(tmp)
-        tmp = 0
-        n = len(heights)
-        for i in range(-1, -n - 1, -1):
-            height = heights[i]
-            if height > tmp:
-                tmp = height
-            top[i] = min(top[i], tmp)
-        tmp = 0
-        for i in range(n):
-            tmp += top[i] - heights[i]
-        return tmp
+    def trap(self, height: List[int]) -> int:
+        ans, current = 0, 0
+        stack = []
+        n = len(height)
+        while current < n:
+            while stack and height[current] > height[stack[-1]]:
+                top = stack.pop()
+                if not stack:
+                    break
+                distance = current - stack[-1] - 1
+                bounded_height = min(height[current], height[stack[-1]]) - height[top]
+                ans += distance * bounded_height
+            stack.append(current)
+            current += 1
+        return ans
 
 
         
