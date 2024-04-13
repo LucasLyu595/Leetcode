@@ -6,34 +6,40 @@
 
 # @lc code=start
 class Solution:
+
+    # Get the maximum area in a histogram given its heights
+    def leetcode84(self, heights):
+        stack = [-1]
+
+        maxarea = 0
+        for i in range(len(heights)):
+
+            while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
+                maxarea = max(maxarea, heights[stack.pop()] * (i - stack[-1] - 1))
+            stack.append(i)
+
+        while stack[-1] != -1:
+            maxarea = max(maxarea, heights[stack.pop()] * (len(heights) - stack[-1] - 1))
+        return maxarea
+
+
     def maximalRectangle(self, matrix: List[List[str]]) -> int:
-        m, n = len(matrix), len(matrix[0])
-        for i in range(m):
-            tmp = 0
-            for j in range(n):
-                if "1" == matrix[i][j]:
-                    tmp += 1
-                    matrix[i][j] = tmp
-                else:
-                    tmp = 0
-                    matrix[i][j] = 0
-        ans = 0
-        for j in range(n):
-            counter = [0] * n
-            max_width = 0
-            for i in range(m):
-                tmp = matrix[i][j]
-                for k in range(tmp):
-                    counter[k] += 1
-                if tmp < max_width:
-                    for k in range(tmp, max_width):
-                        ans = max(ans, (k+1) * counter[k])
-                        counter[k] = 0
-                    max_width = tmp
-                max_width = max(max_width, tmp)
-            for k in range(max_width):
-                ans = max(ans, (k+1) * counter[k])
-        return ans
+
+        if not matrix: return 0
+
+        maxarea = 0
+        dp = [0] * len(matrix[0])
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+
+                # update the state of this row's histogram using the last row's histogram
+                # by keeping track of the number of consecutive ones
+
+                dp[j] = dp[j] + 1 if matrix[i][j] == '1' else 0
+
+            # update maxarea with the maximum area from this row's histogram
+            maxarea = max(maxarea, self.leetcode84(dp))
+        return maxarea
                 
 
         
