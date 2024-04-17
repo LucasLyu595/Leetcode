@@ -19,27 +19,20 @@
 #         self.right = right
 class Solution:
     def smallestFromLeaf(self, root: Optional[TreeNode]) -> str:
-        def helper(node: Optional[TreeNode], suffix: List[int]) -> List[int]:
+        def helper(node: Optional[TreeNode], suffix: str) -> str:
             if not node:
                 return suffix
-            cur = [node.val] + suffix
+            cur = chr(node.val+ord('a')) + suffix
             left = helper(node.left, cur)
             right = helper(node.right, cur)
             if node.right and not node.left:
                 return right
             if node.left and not node.right:
                 return left
-            lenL, lenR = len(left), len(right)
-            for i in range(min(lenL, lenR)):
-                if left[i] == right[i]:
-                    continue
-                if left[i] < right[i]:
-                    return left
-                return right
-            if lenL <= lenR:
+            if left < right:
                 return left
             return right
-        return ''.join(chr(i+ord('a')) for i in helper(root, []))
+        return helper(root, '')
         
 
         
