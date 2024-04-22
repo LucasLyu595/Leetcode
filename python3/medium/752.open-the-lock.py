@@ -5,41 +5,32 @@
 #
 
 # @lc code=start
-from collections import deque
 class Solution:
     def openLock(self, deadends: List[str], target: str) -> int:
-        visited = {}
-        source = '0000'
-        if target == source:
+        if target == "0000":
             return 0
-        numWheels = 4
-        for node in deadends:
-            if node == source:
-                return -1
-            visited[node] = -1
-
-        def getNeighbor(node: str) -> List[str]:
-            nonlocal numWheels
-            ans = []
-            for i in range(numWheels):
-                tmp = node[:i] + str((int(node[i])+1) % 10) + node[i+1:]
-                if tmp not in deadends:
-                    ans.append(tmp)
-                tmp = node[:i] + str((int(node[i])-1) % 10) + node[i+1:]
-                if tmp not in deadends:
-                    ans.append(tmp)
-            return ans
-        
-        frontier = deque([source])
-        visited[source] = 0
-        while frontier:
-            node = frontier.popleft()
-            for neighbor in getNeighbor(node):
-                if neighbor not in visited:
-                    visited[neighbor] = visited[node] + 1
-                    if neighbor == target:
-                        return visited[target]
-                    frontier.append(neighbor)
+        if "0000" in (deadends := set(deadends)):
+            return -1
+        transitions = {str(i): (str((i + 1) % 10), str((i - 1) % 10)) for i in range(10)}
+        start, end = {"0000"}, {target}
+        deadends.add("0000")
+        deadends.add(target)
+        turns = 1
+        while start and end:
+            if len(start) > len(end):
+                start, end = end, start
+            temp = set()
+            for state in start:
+                for i in range(4):
+                    for j in transitions[state[i]]:
+                        new_state = state[:i] + j + state[i+1:]
+                        if new_state in end:
+                            return turns
+                        if new_state not in deadends:
+                            deadends.add(new_state)
+                            temp.add(new_state)
+            start = temp
+            turns += 1
         return -1
 
 
