@@ -5,60 +5,39 @@
 #
 
 # @lc code=start
-from collections import defaultdict, deque
+from collections import defaultdict
 
 
 class Solution:
     def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
-        if n == 1:
-            return [0]
-        if n == 2:
-            return [0, 1]
-        ans = []
+        if n < 2:
+            return [i for i in range(n)]
         graph = defaultdict(list)
 
         for u, v in edges:
             graph[u].append(v)
             graph[v].append(u)
 
-        def getHeight(i: int, minHeight: int) -> int:
-            visited = {}
-            frontier = deque([i])
-            visited[i] = 0
-            ans = 0
-            while frontier:
-                cur = frontier.popleft()
-                for neighbor in graph[cur]:
-                    if neighbor in visited:
-                        continue
-                    frontier.append(neighbor)
-                    visited[neighbor] = visited[cur] + 1
-                    if visited[neighbor] > ans:
-                        ans = visited[neighbor]
-                        if ans > minHeight:
-                            return ans
-            return ans
-        
-        minHeight = getHeight(0, n)
-        ans = [0]
-        frontier = deque([0])
-        visited = set([0])
-        while frontier:
-            cur = frontier.popleft()
-            for neighbor in graph[cur]:
-                if neighbor in visited:
-                    continue
-                visited.add(neighbor)
-                height = getHeight(neighbor, minHeight)
-                if height > minHeight:
-                    continue
-                if height < minHeight:
-                    minHeight = height
-                    ans = [neighbor]
-                elif height == minHeight:
-                    ans.append(neighbor)
-                frontier.append(neighbor)
-        return ans
+
+        leaves = []
+        for k, v in graph.items():
+            if len(v) == 1:
+                leaves.append(k)
+
+
+        numNode = n
+        while numNode > 2:
+            numNode -= len(leaves)
+            tmp = []
+            while leaves:
+                cur = leaves.pop()
+                neighbor = graph[cur][0]
+                graph.pop(cur)
+                graph[neighbor].remove(cur)
+                if len(graph[neighbor]) == 1:
+                    tmp.append(neighbor)
+            leaves = tmp
+        return leaves
 
 # @lc code=end
 
