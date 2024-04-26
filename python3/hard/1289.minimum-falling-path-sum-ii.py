@@ -7,25 +7,65 @@
 # @lc code=start
 class Solution:
     def minFallingPathSum(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])
-        if 1 == m:
-            return min(grid[0])
+        # Save the size of the square grid
+        n = len(grid)
 
-        def backtrace(prefixSum: int, prevCol: int, row: int) -> int:
-            nonlocal m, n
-            if row == m:
-                return prefixSum
-            minSum = prefixSum + 100
+        # Minimum and Second Minimum Column Index
+        next_min1_c = None
+        next_min2_c = None
+
+        # Minimum and Second Minimum Value
+        next_min1 = None
+        next_min2 = None
+        
+        # Find the minimum and second minimum from the last row
+        for col in range(n):
+            if next_min1 is None or grid[n - 1][col] <= next_min1:
+                next_min2 = next_min1
+                next_min2_c = next_min1_c
+                next_min1 = grid[n - 1][col]
+                next_min1_c = col
+            elif next_min2 is None or grid[n - 1][col] <= next_min2:
+                next_min2 = grid[n - 1][col]
+                next_min2_c = col
+        
+        # Fill the recursive cases
+        for row in range(n - 2, -1, -1):
+            # Minimum and Second Minimum Column Index of the current row
+            min1_c = None
+            min2_c = None
+
+            # Minimum and Second Minimum Value of the current row
+            min1 = None
+            min2 = None
+
             for col in range(n):
-                if col == prevCol:
-                    continue
-                prefixSum += grid[row][col]
-                ans = backtrace(prefixSum, col, row+1)
-                if ans < minSum:
-                    minSum = ans
-                prefixSum -= grid[row][col]
-            return minSum
-        return min([backtrace(grid[0][i], i, 1) for i in range(n)])
+                # Select minimum from valid cells of the next row
+                if col != next_min1_c:
+                    value = grid[row][col] + next_min1
+                else:
+                    value = grid[row][col] + next_min2
+                
+                # Save minimum and second minimum 
+                if min1 is None or value <= min1:
+                    min2 = min1
+                    min2_c = min1_c
+                    min1 = value
+                    min1_c = col
+                elif min2 is None or value <= min2:
+                    min2 = value
+                    min2_c = col
+            
+            # Change of row. Update next_min1_c, next_min2_c, next_min1, next_min2
+            next_min1_c = min1_c
+            next_min2_c = min2_c
+            next_min1 = min1
+            next_min2 = min2
+        
+        # Return the minimum from the first row
+        return next_min1
+                
+
         
 # @lc code=end
 
