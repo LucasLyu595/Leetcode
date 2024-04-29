@@ -5,12 +5,16 @@
 #
 
 # @lc code=start
-from functools import reduce
+from typing import List
+
+
 class Solution:
     def minOperations(self, nums: List[int], k: int) -> int:
-        ans = reduce(lambda a, b: a ^ b, nums) ^ k
-        binary_string = bin(ans)[2:]
-        return sum('1' == i for i in binary_string)
+        temp = 0
+        for i in nums:
+            temp ^= i
+        temp ^= k
+        return bin(temp).count('1')
 
         
         
