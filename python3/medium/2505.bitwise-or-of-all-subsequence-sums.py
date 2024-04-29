@@ -5,22 +5,35 @@
 #
 
 # @lc code=start
-from functools import reduce
 class Solution:
     def subsequenceSumOr(self, nums: List[int]) -> int:
-        sums = set()
-        n = len(nums)
-        def backtrack(sum: int, start: int) -> None:
-            nonlocal n
-            sums.add(sum)
-            if start == n:
-                return
-            for i in range(start, n):
-                sum += nums[i]
-                backtrack(sum, i+1)
-                sum -= nums[i]
-        backtrack(0, 0)
-        return reduce(lambda a, b: a | b, sums)
+        counter = []
+        while nums:
+            sum = 0
+            tmp = []
+            while nums:
+                cur = nums.pop()
+                sum += cur % 2
+                cur //= 2
+                if cur:
+                    tmp.append(cur)
+            counter.append(sum)
+            nums = tmp
+        n = len(counter)
+        carry = 0
+        ans = 0
+        for i in range(n):
+            counter[i] = int(counter[i]) + carry
+            if counter[i] > 0:
+                ans += 1 << i
+            carry = counter[i] // 2
+        while carry:
+            ans += 1 << n
+            n += 1
+            carry //= 2
+        return ans
+        
+
 
 # @lc code=end
 
