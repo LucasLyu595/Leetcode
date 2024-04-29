@@ -7,31 +7,17 @@
 # @lc code=start
 class Solution:
     def subsequenceSumOr(self, nums: List[int]) -> int:
-        counter = []
-        while nums:
-            sum = 0
-            tmp = []
-            while nums:
-                cur = nums.pop()
-                sum += cur % 2
-                cur //= 2
-                if cur:
-                    tmp.append(cur)
-            counter.append(sum)
-            nums = tmp
-        n = len(counter)
-        carry = 0
-        ans = 0
-        for i in range(n):
-            counter[i] = int(counter[i]) + carry
-            if counter[i] > 0:
-                ans += 1 << i
-            carry = counter[i] // 2
-        while carry:
-            ans += 1 << n
-            n += 1
-            carry //= 2
-        return ans
+        result = 0
+        prefix_sum = 0
+
+        # Iterate through each element in the input array
+        for num in nums:
+            # Update the cumulative sum by adding the current element
+            prefix_sum += num
+            # Update the result by performing bitwise OR with the current element and the cumulative sum
+            result |= num | prefix_sum
+
+        return result
         
 
 
