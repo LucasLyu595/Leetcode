@@ -5,33 +5,28 @@
 #
 
 # @lc code=start
-from collections import Counter
+from collections import defaultdict
 
 
 class Solution:
     def wonderfulSubstrings(self, word: str) -> int:
+        toBit = {c: 1 << i for i, c in enumerate(ascii_lowercase[:10])}
         mask = 0
-        maskMap = Counter()
-        ans = 0
-        base = ord('a')
-        numLetters = 10
-        numOdd = 0
+
+        count = defaultdict(int)
+        count[0] = 1
+
         for c in word:
-            pos = (1 << (ord(c) - base))
-            mask ^= pos
-            if mask & pos:
-                numOdd += 1
-            else:
-                numOdd -= 1
-            diff = 1
-            for _ in range(numLetters):
-                ans += maskMap[mask ^ diff]
-                diff <<= 1
-            ans += maskMap[mask]
-            maskMap[mask] += 1
-            if numOdd < 2:
-                ans += 1
-        return ans
+            mask ^= toBit[c]
+            count[mask] += 1
+
+        res = 0
+        for mask, cnt in count.items():
+            res += cnt * (cnt - 1) // 2
+            for i in range(10):
+                mask2 = mask ^ (1 << i)
+                if mask2 < mask:
+                    res += cnt * count.get(mask2, 0)
 
 
 
