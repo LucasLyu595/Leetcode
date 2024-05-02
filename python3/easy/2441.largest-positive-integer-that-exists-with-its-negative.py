@@ -5,18 +5,22 @@
 #
 
 # @lc code=start
-from collections import Counter
 class Solution:
     def findMaxK(self, nums: List[int]) -> int:
-        counter = Counter(nums)
         ans = -1
-        for k in counter:
-            if k < 0:
-                continue
-            if counter[-k] > 0 and k > ans:
-                ans = k
-        return ans
 
+        # A set to store seen numbers
+        seen = set()
+
+        for num in nums:
+            abs_num = abs(num)
+
+            # If the absolute value is greater than the current maximum and its negation is seen
+            if abs_num > ans and -num in seen:
+                ans = abs_num
+            seen.add(num)  # Insert the current number into the set
+
+        return ans
 
         
 # @lc code=end
