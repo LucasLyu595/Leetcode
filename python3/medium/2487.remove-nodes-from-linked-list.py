@@ -10,29 +10,40 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-from collections import deque
-
-
-
 class Solution:
     def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        nodes = deque()
-        cur = head
-        while cur:
-            while nodes and nodes[-1].val < cur.val:
-                nodes.pop()
-            nodes.append(cur)
-            cur = cur.next
-        dummy = ListNode()
-        prev = None
-        while nodes:
-            cur = nodes.popleft()
-            if prev:
-                prev.next = cur
-            prev = cur
-            if not dummy.next:
-                dummy.next = cur
-        return dummy.next
+        dummy = head
+        rev = None
+
+        # reverse the list and store in temp rev
+        while dummy:
+            next_node = dummy.next
+            dummy.next = rev
+            rev = dummy
+            dummy = next_node
+
+        # iterate over reversed list
+        dummy = rev
+        head = None
+        max_value = float("-inf")
+
+        # Create new list
+        while dummy:
+            if dummy.val >= max_value:
+                max_value = dummy.val
+
+                # same logic as for reversing
+                new_node = dummy.next
+                dummy.next = head
+                head = dummy
+                dummy = new_node
+            else:
+                dummy = dummy.next
+
+        return head
+
+        
+
 
             
         
