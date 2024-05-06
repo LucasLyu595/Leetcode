@@ -12,34 +12,21 @@
 #         self.next = next
 class Solution:
     def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        dummy = head
-        rev = None
+        # Base case, reached end of the list
+        if head is None or head.next is None:
+            return head
 
-        # reverse the list and store in temp rev
-        while dummy:
-            next_node = dummy.next
-            dummy.next = rev
-            rev = dummy
-            dummy = next_node
-
-        # iterate over reversed list
-        dummy = rev
-        head = None
-        max_value = float("-inf")
-
-        # Create new list
-        while dummy:
-            if dummy.val >= max_value:
-                max_value = dummy.val
-
-                # same logic as for reversing
-                new_node = dummy.next
-                dummy.next = head
-                head = dummy
-                dummy = new_node
-            else:
-                dummy = dummy.next
-
+        # Recursive call
+        next_node = self.removeNodes(head.next)
+        
+        # If the next node has greater value than head, delete the head
+        # Return next node, which removes the current head and 
+        # makes next the new head
+        if head.val < next_node.val:
+            return next_node
+     
+        # Keep the head
+        head.next = next_node
         return head
 
         
