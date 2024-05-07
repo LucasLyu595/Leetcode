@@ -11,29 +11,28 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    # To compute twice the value of each node's value and propagate carry
-    def twice_of_val(self, head: Optional[ListNode]) -> int:
-        # Base case: if head is None, return 0
-        if not head:
-            return 0
+    def doubleIt(self, head: ListNode) -> ListNode:
+        # If the value of the head node is greater than 4, 
+        # insert a new node at the beginning
+        if head.val > 4:
+            head = ListNode(0, head)
         
-        # Double the value of current node and add the result of next nodes
-        doubled_value = head.val * 2 + self.twice_of_val(head.next)
+        # Traverse the linked list
+        node = head
+        while node:
+            # Double the value of the current node 
+            # and update it with the units digit
+            node.val = (node.val * 2) % 10
+            
+            # If the current node has a next node 
+            # and the next node's value is greater than 4,
+            # increment the current node's value to handle carry
+            if node.next and node.next.val > 4:
+                node.val += 1
+            
+            # Move to the next node
+            node = node.next
         
-        # Update current node's value with the units digit of the result
-        head.val = doubled_value % 10
-        
-        # Return the carry (tens digit of the result)
-        return doubled_value // 10
-    
-    def doubleIt(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        carry = self.twice_of_val(head)
-        
-        # If there's a carry, insert a new node at the beginning with the carry value
-        if carry:
-            head = ListNode(carry, head)
-        
-        # Return the head of the updated linked list
         return head
         
         
