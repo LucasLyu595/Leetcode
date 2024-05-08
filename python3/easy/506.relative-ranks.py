@@ -7,21 +7,29 @@
 # @lc code=start
 class Solution:
     def findRelativeRanks(self, score: List[int]) -> List[str]:
-        rank = sorted(score, key=lambda x: -x)
-        placement = {}
-        for index, value in enumerate(rank):
-            placement[value] = index
-        ans = []
-        for s in score:
-            if placement[s] == 0:
-                ans.append("Gold Medal")
-            elif placement[s] == 1:
-                ans.append("Silver Medal")
-            elif placement[s] == 2:
-                ans.append("Bronze Medal")
+        N = len(score)
+
+        # Create a heap of pairs (score, index)
+        heap = []
+        for index, score in enumerate(score):
+            heapq.heappush(heap, (-score, index))
+        
+        # Assign ranks to athletes
+        rank = [0] * N
+        place = 1
+        while heap:
+            original_index = heapq.heappop(heap)[1]
+            if place == 1:
+                rank[original_index] = "Gold Medal"
+            elif place == 2:
+                rank[original_index] = "Silver Medal"
+            elif place == 3:
+                rank[original_index] = "Bronze Medal"
             else:
-                ans.append(f"{placement[s] + 1}")
-        return ans
+                rank[original_index] = str(place)
+            place +=1
+            
+        return rank
         
 # @lc code=end
 
