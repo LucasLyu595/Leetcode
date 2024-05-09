@@ -7,16 +7,21 @@
 # @lc code=start
 class Solution:
     def maximumHappinessSum(self, happiness: List[int], k: int) -> int:
-        happiness.sort()
-        ans = 0
-        i = 0
-        while i < k and happiness:
-            cur = happiness[-1] - i
-            if cur < 0: cur = 0
-            ans += cur
-            happiness.pop()
-            i += 1
-        return ans
+        children = sorted(happiness, reverse=True)
+
+        # Fast calc if no child hits zero happiness
+        # Could do binary search to see if I can do half, quarter, etc this way
+        if children[k-1] >= k-1:
+            return sum(children[:k]) - ((0 + k-1) * k // 2)
+
+        # Else slow way
+        res = 0
+        for i, h in enumerate(children[:k]):
+            if h - i <= 0:
+                break
+            res += h - i
+
+        return res
 
         
 # @lc code=end
