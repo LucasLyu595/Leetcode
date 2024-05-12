@@ -5,15 +5,21 @@
 #
 
 # @lc code=start
+import heapq
 class Solution:
     def kthSmallestPrimeFraction(self, arr: List[int], k: int) -> List[int]:
-        franctions = []
+        franctionsHeap = []
         n = len(arr)
-        for i in range(n-1):
-            for j in range(i+1, n):
-                franctions.append((arr[i], arr[j]))
-        franctions.sort(key=lambda x: x[0] / x[1])
-        return franctions[k-1]
+        for i in range(n - 1):
+            heapq.heappush(franctionsHeap, (arr[i] / arr[-1], i, n - 1))
+        
+        while k > 1:
+            _, i, j = heapq.heappop(franctionsHeap)
+            k -= 1
+            if i < j - 1:
+                heapq.heappush(franctionsHeap, (arr[i] / arr[j-1], i, j-1))
+        _, i, j = heapq.heappop(franctionsHeap)
+        return [arr[i], arr[j]]
 
 
             
