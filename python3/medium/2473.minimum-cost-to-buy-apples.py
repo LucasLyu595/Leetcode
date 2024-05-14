@@ -19,6 +19,8 @@ class Solution:
         heapq.heapify(frontier)
         while frontier:
             curCost, cur = heapq.heappop(frontier)
+            if curCost > appleCost[cur-1]:
+                continue
             for neighbor, cost in graph[cur]:
                 newCost = (1+k) * cost + curCost
                 oldCost = appleCost[neighbor-1]
