@@ -5,7 +5,7 @@
 #
 
 # @lc code=start
-from collections import deque
+import heapq
 
 
 class Solution:
@@ -32,35 +32,22 @@ class Solution:
                         next.append((x, y))
             frontier = next
             layer += 1
- 
-        def isValidSafeness(minSafeness: int) -> bool:
-            nonlocal n
-            frontier = deque([(0, 0)])
-            visited = [[0] * n for _ in range(n)]
-            visited[0][0] = 1
-            while frontier:
-                i, j = frontier.popleft()
-                if i == n - 1 and j == n - 1:
-                    return True
-                for d in range(4):
-                    x, y = i + dir[d], j + dir[d+1]
-                    if 0 <= x < n and 0 <= y < n and not visited[x][y]:
-                        visited[x][y] = 1
-                        if grid[x][y] >= minSafeness:
-                            frontier.append((x, y))
-            return False
-        low, high = 0, min(grid[0][0], grid[n-1][n-1])
-        if isValidSafeness(high):
-            return high
-        ans = 0
-        while low <= high:
-            mid = low + (high - low) // 2
-            if isValidSafeness(mid):
-                low = mid + 1
-                ans = mid
-            else:
-                high = mid - 1
-        return ans
+        frontier = [(-grid[0][0], 0, 0)]
+        ans = min(grid[0][0], grid[n-1][n-1])
+        visited = [[0] * n for _ in range(n)]
+        visited[0][0] = 1
+        while frontier:
+            safeness, i, j = heapq.heappop(frontier)
+            if -safeness < ans:
+                ans = -safeness
+            if n - 1 == i == j:
+                return ans
+            for d in range(4):
+                x, y = i + dir[d], j + dir[d+1]
+                if 0 <= x < n and 0 <= y < n and not visited[x][y]:
+                    visited[x][y] = 1
+                    heapq.heappush(frontier, (-grid[x][y], x, y))
+        return 0
 
         
 # @lc code=end
