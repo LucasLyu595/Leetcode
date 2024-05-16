@@ -20,6 +20,8 @@ class Solution:
             if 0 == room[x][y]:
                 room[x][y] = 2
                 ans += 1
+                if ans == cap:
+                    return cap
             else:
                 room[x][y] += 1
             findNext = False
