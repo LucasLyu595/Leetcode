@@ -7,25 +7,18 @@
 # @lc code=start
 class Solution:
     def longestIdealString(self, s: str, k: int) -> int:
-        n = len(s)
-        
-        @lru_cache(maxsize=None)
-        def helper(i: int) -> int:
-            nonlocal n, k
-            if i == n:
-                return 0
-            cur = ord(s[i])
-            ans = 0
-            for j in range(i + 1, n):
-                tmp = ord(s[j])
-                if abs(cur - tmp) <= k:
-                    ans = max(ans, helper(j))
-            return ans + 1
         ans = 0
-        for i in range(n):
-            ans = max(ans, helper(i))
+        dp = [0] * 26
+        for i in range(len(s)):
+            cur = ord(s[i]) - ord('a')
+            tmp = 0
+            for prev in range(max(0, cur - k), min(25, cur + k) + 1):
+                tmp = max(tmp, dp[prev])
+            dp[cur] = tmp + 1
+            ans = max(ans, dp[cur])
         return ans
-            
+
+        
             
 
         
