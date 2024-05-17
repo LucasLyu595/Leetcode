@@ -7,20 +7,12 @@
 # @lc code=start
 class Solution:
     def longestIdealString(self, s: str, k: int) -> int:
-        ans = 0
-        dp = [0] * 26
-        for i in range(len(s)):
-            cur = ord(s[i]) - ord('a')
-            tmp = 0
-            for prev in range(max(0, cur - k), min(25, cur + k) + 1):
-                tmp = max(tmp, dp[prev])
-            dp[cur] = tmp + 1
-            ans = max(ans, dp[cur])
-        return ans
+        ascii = [0] * 123
+        for ch in s:
+            i = ord(ch)
+            ascii[i] = max(ascii[i - k:i + k + 1]) + 1
 
-        
-            
-
+        return max(ascii)
         
 # @lc code=end
 
