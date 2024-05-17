@@ -17,7 +17,7 @@ class Solution:
             return None
         root.left = self.removeLeafNodes(root.left, target)
         root.right = self.removeLeafNodes(root.right, target)
-        if target == root.val and not root.left and not root.right:
+        if not root.left and not root.right and target == root.val :
             return None
         return root
 
