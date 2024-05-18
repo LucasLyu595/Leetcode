@@ -11,8 +11,7 @@ import heapq
 class Solution:
     def scheduleCourse(self, courses: List[List[int]]) -> int:
         courses.sort(key=lambda x: x[1])
-        taken = []
-        ans = 0
+        taken = [0]
         curDay = 0
         for duration, lastDay in courses:
             if duration > lastDay:
@@ -20,11 +19,10 @@ class Solution:
             if curDay + duration <= lastDay:
                 curDay += duration
                 heapq.heappush(taken, -duration)
-                ans += 1
             else:
                 maxD = heapq.heappushpop(taken, -duration)
                 curDay += duration + maxD
-        return ans
+        return len(taken) - 1
 
 
 
