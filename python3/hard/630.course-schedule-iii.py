@@ -5,6 +5,9 @@
 #
 
 # @lc code=start
+import heapq
+
+
 class Solution:
     def scheduleCourse(self, courses: List[List[int]]) -> int:
         courses.sort(key=lambda x: x[1])
@@ -16,16 +19,11 @@ class Solution:
                 continue
             if curDay + duration <= lastDay:
                 curDay += duration
-                taken.append(duration)
+                heapq.heappush(taken, -duration)
                 ans += 1
             else:
-                maxI, maxD = -1, duration
-                for i, dura in enumerate(taken):
-                    if dura > maxD:
-                        maxI, maxD = i, dura
-                if maxI != -1:
-                    taken[maxI] = duration
-                    curDay += duration - maxD
+                maxD = heapq.heappushpop(taken, -duration)
+                curDay += duration + maxD
         return ans
 
 
