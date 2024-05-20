@@ -7,14 +7,10 @@
 # @lc code=start
 class Solution:
     def subsetXORSum(self, nums: List[int]) -> int:
-        self.ans = 0
-        def backtrack(cur: int, start: int) -> None:
-            self.ans += cur
-            for i in range(start, len(nums)):
-                key = nums[i]
-                backtrack(cur ^ key, i + 1)
-        backtrack(0, 0)
-        return self.ans
+        ans = 0
+        for num in nums:
+            ans |= num
+        return ans << (len(nums) - 1)
         
 # @lc code=end
 
