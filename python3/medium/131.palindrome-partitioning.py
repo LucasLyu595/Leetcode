@@ -6,27 +6,34 @@
 
 # @lc code=start
 class Solution:
+    def __init__(self):
+        self.memory = {}
+        
     def partition(self, s: str) -> List[List[str]]:
-        ans = []
-        n = len(s)
+        if(s in self.memory):
+            return self.memory[s]
+        
+        if(len(s) == 0):
+             result = [[]]
+        elif(len(s) == 1):
+             result = [[s]]
+        else:
+            result = []
+            for i in range(1, len(s) + 1):  
+                left = []
+                if(s[:i] == s[:i][::-1]):
+                    left.append([s[:i]])
+                else:
+                    continue
+                right = self.partition(s[i:])
 
-        def isPalindrome(start: int, end: int) -> bool:
-            while start < end:
-                if s[start] != s[end]:
-                    return False
-                start += 1
-                end -= 1
-            return True
-
-        def backtrack(cur: list, start: int) -> None:
-            if start == n:
-                ans.append(cur)
-                return
-            for i in range(start, n):
-                if isPalindrome(start, i):
-                    backtrack(cur+[s[start:i+1]], i+1)
-        backtrack([], 0)
-        return ans 
+                for l in left:
+                    for r in right:
+                        result.append(l + r)
+        
+        self.memory[s] = result
+        return result
+        
 
 
 # @lc code=end
