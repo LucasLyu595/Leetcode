@@ -11,12 +11,12 @@ from collections import Counter
 class Solution:
     def beautifulSubsets(self, nums: List[int], k: int) -> int:
         nums.sort()
-        ans = []
+        self.ans = 0
         no_counter = Counter()
         def backtrack(cur: list, start: int) -> None:
             nonlocal k
             n = len(nums)
-            ans.append(cur)
+            self.ans += 1
             if start == n:
                 return
             for i in range(start, n):
@@ -25,7 +25,7 @@ class Solution:
                     backtrack(cur + [nums[i]], i+1)
                     no_counter[nums[i]+k] -= 1
         backtrack([], 0)
-        return len(ans) - 1
+        return self.ans - 1
 
         
 
