@@ -12,37 +12,30 @@ class Solution:
 
         # Calculate frequencies based on remainder
         for num in nums:
-            remainder = num % k
-            freq_map[remainder][num] = freq_map[remainder].get(num, 0) + 1
+            freq_map[num % k][num] = freq_map[num % k].get(num, 0) + 1
 
         # Iterate through each remainder group
         for fr in freq_map.values():
-            n = len(fr)  # Number of elements in the current group
+            prev_num, curr, prev1, prev2 = -k, 1, 1, 0
 
-            subsets = sorted(fr.items())
-            counts = [0] * (n + 1)  # Array to store counts of subsets
-            counts[n] = 1  # Initialize count for the last subset
+            # Iterate through each number in the current remainder group
+            for num, freq in sorted(fr.items()):
+                # Count of subsets skipping the current number
+                skip = prev1  
 
-            # Calculate counts for each subset starting from the second last
-            for i in range(n - 1, -1, -1):
-
-                # Count of subsets skipping the current subset
-                skip = counts[i + 1]
-                # Count of subsets including the current subset
-                take = 2 ** subsets[i][1] - 1
-
-                # If next number has a 'difference', 
-                # calculate subsets; otherwise, move to next
-                if i + 1 < n and subsets[i + 1][0] - subsets[i][0] == k:
-                    take *= counts[i + 2]
+                # Count of subsets including the current number
+                # Check if the current number and the previous number 
+                # form a beautiful pair
+                if num - prev_num == k:
+                    take = ((1 << freq) - 1) * prev2
                 else:
-                    take *= counts[i + 1]
+                    take = ((1 << freq) - 1) * prev1
 
-                # Store the total count for the current subset
-                counts[i] = skip + take
-
-            total_count *= counts[0]
-
+                # Store the total count for the current number
+                curr = skip + take  
+                prev2, prev1 = prev1, curr
+                prev_num = num
+            total_count *= curr
         return total_count - 1
 
         
