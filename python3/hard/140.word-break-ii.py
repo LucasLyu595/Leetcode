@@ -7,38 +7,33 @@
 # @lc code=start
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
-        # Convert wordDict to a set for O(1) lookups
         word_set = set(wordDict)
-        results = []
-        # Start the backtracking process
-        self._backtrack(s, word_set, [], results, 0)
-        return results
+        memoization = {}
 
-    def _backtrack(
-        self,
-        s: str,
-        word_set: set,
-        current_sentence: List[str],
-        results: List[str],
-        start_index: int,
-    ):
-        # If we've reached the end of the string, add the current sentence to results
-        if start_index == len(s):
-            results.append(" ".join(current_sentence))
-            return
+        # Depth-first search function to find all possible word break combinations
+        def dfs(start: int) -> List[str]:
+            n = len(s)
+            remaining_str = s[start:n]
+            # Check if result for this substring is already memoized
+            if remaining_str in memoization:
+                return memoization[remaining_str]
+            # Base case: when the string is empty, return a list containing an empty string
+            if not remaining_str:
+                return [""]
+            results = []
+            for i in range(start, n):
+                current_word = s[start: i+1]
+                # If the current substring is a valid word
+                if current_word in word_set:
+                    for next_word in dfs(i+1): # Append current word and next word with space in between if next word exists
+                        results.append(
+                            current_word + (" " if next_word else "") + next_word
+                        )
+            # Memoize the results for the current substring
+            memoization[remaining_str] = results
+            return results
 
-        # Iterate over possible end indices
-        for end_index in range(start_index + 1, len(s) + 1):
-            word = s[start_index:end_index]
-            # If the word is in the set, proceed with backtracking
-            if word in word_set:
-                current_sentence.append(word)
-                # Recursively call backtrack with the new end index
-                self._backtrack(
-                    s, word_set, current_sentence, results, end_index
-                )
-                # Remove the last word to backtrack
-                current_sentence.pop()
+        return dfs(0)
 
 
 # @lc code=end
