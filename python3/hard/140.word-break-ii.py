@@ -7,34 +7,38 @@
 # @lc code=start
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
-        dictTree = {}
-        for word in wordDict:
-            cur = dictTree
-            for char in word:
-                if char not in cur:
-                    cur[char] = {}
-                cur = cur[char]
-            cur['*'] = None
-        ans = []
+        # Convert wordDict to a set for O(1) lookups
+        word_set = set(wordDict)
+        results = []
+        # Start the backtracking process
+        self._backtrack(s, word_set, [], results, 0)
+        return results
 
-        def backtrack(cur: list, start: int) -> None:
-            n = len(s)
-            if start == n:
-                ans.append(' '.join(cur))
-                return
-            word = []
-            node = dictTree
-            for i in range(start, n):
-                if s[i] not in node:
-                    return
-                word.append(s[i])
-                node = node[s[i]]
-                if '*' in node:
-                    cur.append(''.join(word))
-                    backtrack(cur, i + 1)
-                    cur.pop()
-        backtrack([], 0)
-        return ans
+    def _backtrack(
+        self,
+        s: str,
+        word_set: set,
+        current_sentence: List[str],
+        results: List[str],
+        start_index: int,
+    ):
+        # If we've reached the end of the string, add the current sentence to results
+        if start_index == len(s):
+            results.append(" ".join(current_sentence))
+            return
+
+        # Iterate over possible end indices
+        for end_index in range(start_index + 1, len(s) + 1):
+            word = s[start_index:end_index]
+            # If the word is in the set, proceed with backtracking
+            if word in word_set:
+                current_sentence.append(word)
+                # Recursively call backtrack with the new end index
+                self._backtrack(
+                    s, word_set, current_sentence, results, end_index
+                )
+                # Remove the last word to backtrack
+                current_sentence.pop()
 
 
 # @lc code=end
