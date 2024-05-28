@@ -5,22 +5,18 @@
 #
 
 # @lc code=start
-import heapq
+import bisect
+
+
 class Solution:
     def specialArray(self, nums: List[int]) -> int:
-        heapq.heapify(nums)
         n = len(nums)
-        prev = 0
-        while nums:
-            cur = heapq.heappop(nums)
-            if prev >= n:
-                return -1
-            elif n <= cur:
-                return n
-            prev = cur
-            n -= 1
+        nums.sort()
+        for i in range(1, n+1):
+            k = bisect.bisect_left(nums, i)
+            if k + i == n:
+                return i
         return -1
-
         
 # @lc code=end
 
