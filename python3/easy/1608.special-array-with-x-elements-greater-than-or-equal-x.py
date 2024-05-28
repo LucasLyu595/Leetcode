@@ -5,17 +5,20 @@
 #
 
 # @lc code=start
-import bisect
-
-
 class Solution:
     def specialArray(self, nums: List[int]) -> int:
-        n = len(nums)
-        nums.sort()
-        for i in range(1, n+1):
-            k = bisect.bisect_left(nums, i)
-            if k + i == n:
+        N = len(nums)
+        
+        freq = [0] * (N + 1)
+        for num in nums:
+            freq[min(N, num)] += 1
+        
+        num_greater_than_or_equal = 0
+        for i in range(N, 0, -1):
+            num_greater_than_or_equal += freq[i]
+            if i == num_greater_than_or_equal:
                 return i
+        
         return -1
         
 # @lc code=end
