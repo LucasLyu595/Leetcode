@@ -7,22 +7,18 @@
 # @lc code=start
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
-        mult = 1
-        n = len(nums)
-        ans = 0
-        for _ in range(32):
-            bitSum = 0
-            for i in range(n):
-                if not nums[i]:
-                    continue
-                bitSum += nums[i] & 1
-                nums[i] >>= 1
-            bitSum = bitSum % 3
-            ans += bitSum * mult
-            mult <<= 1
-        if ans >= (1 << 31):
-            ans -= 1 << 32
-        return ans
+
+        # Initialize seen_once and seen_twice to 0
+        seen_once = seen_twice = 0
+
+        # Iterate through nums
+        for num in nums:
+            # Update using derived equations
+            seen_once = (seen_once ^ num) & (~seen_twice)
+            seen_twice = (seen_twice ^ num) & (~seen_once)
+
+        # Return integer which appears exactly once
+        return seen_once
 
         
 # @lc code=end
