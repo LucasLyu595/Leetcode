@@ -5,14 +5,19 @@
 #
 
 # @lc code=start
-from collections import Counter
-from functools import reduce
-import operator
-
-
 class Solution:
     def commonChars(self, words: List[str]) -> List[str]:
-        return reduce(operator.__and__, map(Counter, words)).elements()
+        if len(words) == 1:
+            return words[0]
+
+        result = []
+        chars = set(words[0])
+        
+        for char in chars:
+            frequency = min([word.count(char) for word in words])
+            result += frequency * [char]
+
+        return result
         
         
 
