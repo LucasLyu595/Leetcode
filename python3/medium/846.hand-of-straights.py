@@ -14,15 +14,26 @@ class Solution:
         if n % groupSize:
             return False
         counter = Counter(hand)
-        for key in sorted(counter.keys()):
-            num = counter[key]
-            if not num:
+        m = len(counter.keys())
+        for key in counter.keys():
+            if not counter[key]:
                 continue
-            for i in range(groupSize):
-                if counter[key+i] < num:
-                    return False
-                counter[key+i] -= num
+            start = key
+            while counter[start - 1]:
+                start -= 1
+            while start <= key:
+                num = counter[start]
+                if num:
+                    for i in range(groupSize):
+                        if counter[start+i] < num:
+                            return False
+                        counter[start+i] -= num
+                start += 1
+                m -= 1
+                if not m:
+                    return True
         return True
+
 
 
         
