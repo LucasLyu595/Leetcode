@@ -18,33 +18,28 @@ class Solution:
                 if char not in cur:
                     cur[char] = {}
                 cur = cur[char]
+            if '*' in cur:
+                continue
             if cur:
                 cur.clear()
-            cur['*'] = ''
+            cur['*'] = word
 
         for word in sentence:
             cur = pref_map
-            tmp = []
-            notAppend = True
+            appendWord = True
             for char in word:
                 if char not in cur:
-                    ans.append(word)
-                    notAppend = False
                     break
                 cur = cur[char]
-                tmp.append(char)
                 if '*' in cur:
+                    appendWord = False
                     break
-            if notAppend:
-                ans.append(''.join(tmp))
+            if appendWord:
+                ans.append(word)
+            else:
+                ans.append(cur['*'])
         return ' '.join(ans)
 
 
-
-        
-
-        
-
-        
 # @lc code=end
 
