@@ -7,38 +7,25 @@
 # @lc code=start
 class Solution:
     def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        len_map = {w: len(w) for w in dictionary}
+        mi, ma = min(len_map.values()), max(len_map.values())
+        # mi, ma = 100, 0
+        # for l in len_map.values():
+        #     if l < mi:
+        #         mi = l
+        #     if l > ma:
+        #         ma = l
+        words = sentence.split()
         ans = []
-        sentence = sentence.split()
-        pref_map = {}
-        for word in dictionary:
-            cur = pref_map
-            for char in word:
-                if '*' in cur:
+        for word in words:
+            cur = word
+            for i in range(mi, min(ma, len(word)) + 1):
+                tmp = word[:i]
+                if tmp in len_map:
+                    cur = tmp
                     break
-                if char not in cur:
-                    cur[char] = {}
-                cur = cur[char]
-            if '*' in cur:
-                continue
-            if cur:
-                cur.clear()
-            cur['*'] = word
-
-        for word in sentence:
-            cur = pref_map
-            appendWord = True
-            for char in word:
-                if char not in cur:
-                    break
-                cur = cur[char]
-                if '*' in cur:
-                    appendWord = False
-                    break
-            if appendWord:
-                ans.append(word)
-            else:
-                ans.append(cur['*'])
-        return ' '.join(ans)
+            ans.append(cur)
+        return " ".join(ans)
 
 
 # @lc code=end
