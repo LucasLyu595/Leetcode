@@ -7,15 +7,16 @@
 # @lc code=start
 class Solution:
     def checkSubarraySum(self, nums: List[int], k: int) -> bool:
-        n = len(nums)
-        for i in range(n - 2, -1, -1):
-            for j in range(i + 1, n):
-                nums[j] = nums[i] + nums[j]
-                nums[j] %= k
-                if nums[j] == 0:
+        seen = {0: -1}
+        prev = 0
+        for i in range(len(nums)):
+            prev = (prev + nums[i]) % k
+            if prev in seen:
+                if i - seen[prev] > 1:
                     return True
+            else:
+                seen[prev] = i
         return False
-
 
         
 # @lc code=end
