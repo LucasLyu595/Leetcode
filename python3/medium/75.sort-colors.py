@@ -5,24 +5,31 @@
 #
 
 # @lc code=start
-from collections import Counter
-
-
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
         """
         Do not return anything, modify nums in-place instead.
         """
-        counter = Counter(nums)
-        p = 0
-        i = 0
-        while i < len(nums):
-            while counter[p]:
-                nums[i] = p
-                counter[p] -= 1
-                i += 1
-            p += 1
-            
+        left, right = 0, len(nums) - 1
+        curr = 0
+        while curr <= right:
+            while left <= right and 0 == nums[left]:
+                left += 1
+            while left <= right and 2 == nums[right]:
+                right -= 1
+            if curr < left:
+                curr = left
+            if curr > right:
+                break
+            if 0 == nums[curr]:
+                nums[left], nums[curr] = nums[curr], nums[left]
+                left += 1
+                curr += 1
+            elif 2 == nums[curr]:
+                nums[right], nums[curr] = nums[curr], nums[right]
+                right -= 1
+            else:
+                curr += 1
 
         
 # @lc code=end
