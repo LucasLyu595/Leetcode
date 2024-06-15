@@ -14,10 +14,9 @@ class Solution:
         afford, rest = [], []
         for profit, cap in zip(profits, capital):
             if cap <= w:
-                afford.append(-profit)
+                heapq.heappush(afford, -profit)
             else:
                 rest.append((cap, profit))
-        heapify(afford)
         rest.sort(key=lambda x: x[0])
         rest = deque(rest)
  
