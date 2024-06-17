@@ -7,25 +7,17 @@
 # @lc code=start
 class Solution:
     def maxBoxesInWarehouse(self, boxes: List[int], warehouse: List[int]) -> int:
-        left, right = 0, len(warehouse) - 1
-        ans = 0
-        boxes = sorted(boxes, reverse=True)
-        b = 0
-        while left <= right:
-            room = 0
-            if warehouse[left] < warehouse[right]:
-                room = warehouse[right]
-                right -= 1
-            else:
-                room = warehouse[left]
-                left += 1
-            while b < len(boxes) and boxes[b] > room:
-                b += 1
-            if b == len(boxes):
-                break
-            b += 1
-            ans += 1
-        return an
+        ans = lo = 0
+        hi = len(warehouse)-1
+        for box in sorted(boxes, reverse=True): 
+            if lo <= hi: 
+                if box <= warehouse[lo]: 
+                    lo += 1
+                    ans += 1
+                elif box <= warehouse[hi]: 
+                    hi -= 1
+                    ans += 1
+        return ans
         
         
 # @lc code=end
