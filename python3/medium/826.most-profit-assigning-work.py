@@ -5,30 +5,17 @@
 #
 
 # @lc code=start
-from collections import Counter
-import heapq
-
-
 class Solution:
     def maxProfitAssignment(self, difficulty: List[int], profit: List[int], worker: List[int]) -> int:
-        counter = Counter(worker)
-        workers = sorted(counter.keys())
-        jobs = {}
-        for diff, pro in zip(difficulty, profit):
-            jobs[diff] = max(jobs.get(diff, 0), pro)
-        difficulty = sorted(jobs.keys())
-        ans = 0
-        profit = []
-        heapq.heapify(profit)
-        j = 0
-        for worker in workers:
-            while j < len(difficulty) and difficulty[j] <= worker:
-                if not profit or jobs[difficulty[j]] + profit[0] > 0:
-                    heapq.heappush(profit, -jobs[difficulty[j]])
-                j += 1
-            if profit:
-                ans -= profit[0] * counter[worker]
-        return ans
+        high = max(worker)
+        jobs = [0] * (high + 1)
+        for i in range(len(difficulty)):
+            if difficulty[i] <= high:
+                jobs[difficulty[i]] = max(profit[i], jobs[difficulty[i]])
+        for i in range(1, len(jobs)):
+            jobs[i] = max(jobs[i], jobs[i-1])
+        return sum(jobs[work] for work in worker)
+
 
         
 # @lc code=end
