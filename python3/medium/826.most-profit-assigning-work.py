@@ -23,7 +23,8 @@ class Solution:
         j = 0
         for worker in workers:
             while j < len(difficulty) and difficulty[j] <= worker:
-                heapq.heappush(profit, -jobs[difficulty[j]])
+                if not profit or jobs[difficulty[j]] + profit[0] > 0:
+                    heapq.heappush(profit, -jobs[difficulty[j]])
                 j += 1
             if profit:
                 ans -= profit[0] * counter[worker]
