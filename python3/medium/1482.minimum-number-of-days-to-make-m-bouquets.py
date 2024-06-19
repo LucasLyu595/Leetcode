@@ -5,49 +5,42 @@
 #
 
 # @lc code=start
-from collections import Counter
-
-
 class Solution:
-    def minDays(self, bloomDay: List[int], m: int, k: int) -> int:
-        num = m * k
-        if num > len(bloomDay):
+    def get_num_of_bouquets(self, bloomDay, mid, k):
+        num_of_bouquets = 0
+        count = 0
+
+        for day in bloomDay:
+            # If the flower is bloomed, add to the set. Else reset the count.
+            if day <= mid:
+                count += 1
+            else:
+                count = 0
+
+            if count == k:
+                num_of_bouquets += 1
+                count = 0
+
+        return num_of_bouquets
+
+    def minDays(self, bloomDay, m, k):
+        if m * k > len(bloomDay):
             return -1
-        elif num == len(bloomDay):
-            return max(bloomDay)
-        counter = Counter(bloomDay)
-        days = sorted(counter.keys())
-        total = 0
-        p = 0
-        for i in range(len(days)):
-            total += counter[days[i]]
-            if total >= num:
-                p = i
-                break
-        isBloom = [False] * len(bloomDay)
-        numBouquets = 0
-        while numBouquets < m:
-            numBouquets = 0
-            numAdjBlooms = 0
-            if p >= len(days):
-                break
-            for i in range(len(bloomDay)):
-                if isBloom[i]:
-                    numAdjBlooms += 1
-                    continue
-                if days[p] >= bloomDay[i]:
-                    numAdjBlooms += 1
-                    isBloom[i] = True
-                    continue
-                numBouquets += numAdjBlooms // k
-                if numBouquets >= m:
-                    return days[p]
-                numAdjBlooms = 0
-            numBouquets += numAdjBlooms // k
-            if numBouquets >= m:
-                return days[p]
-            p += 1
-        return -1
+
+        start = min(bloomDay)
+        end = max(bloomDay)
+        minDays = -1
+
+        while start <= end:
+            mid = (start + end) // 2
+
+            if self.get_num_of_bouquets(bloomDay, mid, k) >= m:
+                minDays = mid
+                end = mid - 1
+            else:
+                start = mid + 1
+
+        return minDays
 
 # @lc code=end
 
