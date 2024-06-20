@@ -7,31 +7,30 @@
 # @lc code=start
 class Solution:
     def maxDistance(self, position: List[int], m: int) -> int:
-        high = (max(position) - min(position)) // (m - 1)
-        low = 1
+
+        def checkValid(force: int) -> bool:
+            res = m - 1
+            next = position[0] + force
+            for p in position[1:]:
+                if p >= next:
+                    res -= 1
+                    if not res:
+                        return True
+                    next = p + force
+            return False
+
         position.sort()
- 
-        def checkValid(force: int, start: int, n: int) -> bool:
-            if 1 == n:
-                return True
-            if start == len(position):
-                return False
-            if force * (n - 1) > position[-1] - position[start]:
-                return False
-            next = start
-            pos = position[start] + force
-            while position[next] < pos:
-                next += 1
-            return checkValid(force, next, n - 1)
-        ans = 0
-        while low <= high:
-            mid = low + (high - low) // 2
-            if checkValid(mid, 0, m):
-                ans = mid
-                low = mid + 1
-                continue
-            high = mid - 1
-        return ans
+        if m == 2:
+            return position[-1] - position[0]
+        low = 1
+        high = (position[-1] - position[0]) // (m - 1)
+        while low < high:
+            mid = (low + high + 1) // 2
+            if checkValid(mid):
+                low = mid
+            else:
+                high = mid -1
+        return low        
 
 
         
