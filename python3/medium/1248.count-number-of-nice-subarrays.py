@@ -5,25 +5,21 @@
 #
 
 # @lc code=start
-from collections import Counter
-
-
 class Solution:
     def numberOfSubarrays(self, nums: List[int], k: int) -> int:
-        numOdds = [num & 1 for num in nums]
-        for i in range(1, len(nums)):
-            numOdds[i] += numOdds[i-1]
-        high = max(numOdds)
-        if k > high:
-            return 0
-        ans = 0
-        counter = Counter(numOdds)
-        counter[0] += 1
-        for i in range(high + 1):
-            if i + k > high:
-                break
-            ans += counter[i] * counter[i+k]
-        return ans
+        curr_sum = 0
+        subarrays = 0
+        prefix_sum = {curr_sum: 1}
+
+        for i in range(len(nums)):
+            curr_sum += nums[i] & 1
+            # Find subarrays with sum k ending at i
+            if curr_sum - k in prefix_sum:
+                subarrays = subarrays + prefix_sum[curr_sum - k]
+            # Increment the current prefix sum in hashmap
+            prefix_sum[curr_sum] = prefix_sum.get(curr_sum, 0) + 1
+
+        return subarrays
 
 
 # @lc code=end
