@@ -5,19 +5,28 @@
 #
 
 # @lc code=start
+from collections import deque
+
+
 class Solution:
     def numberOfSubarrays(self, nums: List[int], k: int) -> int:
-        curr_sum = 0
+        odd_indices = deque()
         subarrays = 0
-        prefix_sum = {curr_sum: 1}
+        last_popped = -1
+        initial_gap = -1
 
         for i in range(len(nums)):
-            curr_sum += nums[i] & 1
-            # Find subarrays with sum k ending at i
-            if curr_sum - k in prefix_sum:
-                subarrays = subarrays + prefix_sum[curr_sum - k]
-            # Increment the current prefix sum in hashmap
-            prefix_sum[curr_sum] = prefix_sum.get(curr_sum, 0) + 1
+            # If element is odd, append its index to the deque.
+            if nums[i] & 1:
+                odd_indices.append(i)
+            # If the number of odd numbers exceeds k, remove the first odd index.
+            if len(odd_indices) > k:
+                last_popped = odd_indices.popleft()
+            # If there are exactly k odd numbers, add the number of even numbers
+            # in the beginning of the subarray to the result.
+            if len(odd_indices) == k:
+                initial_gap = odd_indices[0] - last_popped
+                subarrays += initial_gap
 
         return subarrays
 
