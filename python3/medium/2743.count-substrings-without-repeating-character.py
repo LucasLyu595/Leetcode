@@ -5,21 +5,22 @@
 #
 
 # @lc code=start
-from collections import Counter
-
-
+from collections import defaultdict
 class Solution:
     def numberOfSpecialSubstrings(self, s: str) -> int:
-        counter = Counter()
+        # Sliding window
+        # Time complexity: O(N), space complexity: O(1),
+        # where N = len(s).
+        start = -1
+        # pos[x] is the position of the last occurrence
+        # of x encountered so far.
+        pos = defaultdict(lambda: -1)
         ans = 0
-        left = 0
-        for right in range(len(s)):
-            char = s[right]
-            counter[char] += 1
-            while counter[char] > 1:
-                counter[s[left]] -= 1
-                left += 1
-            ans += right - left + 1
+        for end, x in enumerate(s):
+            if pos[x] > start: 
+                start = pos[x]
+            ans += end - start
+            pos[x] = end
         return ans
         
 # @lc code=end
