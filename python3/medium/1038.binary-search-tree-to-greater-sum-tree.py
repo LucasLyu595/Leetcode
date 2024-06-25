@@ -13,20 +13,17 @@
 #         self.right = right
 class Solution:
     def bstToGst(self, root: TreeNode) -> TreeNode:
-        node_list = []
-        def add(node: TreeNode) -> None:
-            if not node:
-                return
-            add(node.right)
-            node_list.append(node)
-            add(node.left)
-        add(root)
         cum = 0
-        for node in node_list:
+        def dfs(node: TreeNode) -> None:
+            nonlocal cum
+            if node.right:
+                dfs(node.right)
             cum += node.val
             node.val = cum
+            if node.left:
+                dfs(node.left)
+        dfs(root)
         return root
-        
 
         
 # @lc code=end
