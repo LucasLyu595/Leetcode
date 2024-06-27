@@ -7,7 +7,7 @@
 # @lc code=start
 class Solution:
     def findCenter(self, edges: List[List[int]]) -> int:
-        return list(set(edges[0]) & set(edges[1]))[0]
+        return edges[0][0] if edges[0][0] in edges[1] else edges[0][1]
         
 # @lc code=end
 
