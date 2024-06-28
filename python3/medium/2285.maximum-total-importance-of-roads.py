@@ -5,20 +5,18 @@
 #
 
 # @lc code=start
-from collections import Counter
-
-
 class Solution:
     def maximumImportance(self, n: int, roads: List[List[int]]) -> int:
-        counter = Counter()
-        for u, v in roads:
-            counter[u] += 1
-            counter[v] += 1
-        ans = 0
-        for v in sorted(counter.values(), key=lambda x : -x):
-            ans += v * n
-            n -= 1
-        return ans
+        Arr = [0] * n  # i-th city has Arr[i] roads
+        for A,B in roads:
+            Arr[A] += 1 # Each road increase the road count
+            Arr[B] += 1
+        Arr.sort()  # Cities with most road should receive the most score
+        summ = 0
+        for i in range(len(Arr)):
+            summ += Arr[i] * (i+1)  # Multiply city roads with corresponding score
+        
+        return summ
         
 # @lc code=end
 
