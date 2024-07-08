@@ -5,20 +5,16 @@
 #
 
 # @lc code=start
-from collections import deque
-
-
 class Solution:
     def findTheWinner(self, n: int, k: int) -> int:
-        queue = deque(range(1, n+1))
-        while len(queue) > 1:
-            counter = k - 1
-            while counter:
-                tmp = queue.popleft()
-                queue.append(tmp)
-                counter -= 1
-            queue.popleft()
-        return queue[0]
+        ans = 0
+        for i in range(2, n + 1):
+            ans = (ans + k) % i
+        # add 1 to convert back to 1 indexing
+        return ans + 1
+            
+            
+
 
         
 # @lc code=end
