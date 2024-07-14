@@ -12,6 +12,18 @@ class Solution:
     def countOfAtoms(self, formula: str) -> str:
         counter = Counter()
 
+        def findCloseParentheses(start: int, end: int) -> int:
+            counter = 0
+            while start < end:
+                if '(' == formula[start]:
+                    counter += 1
+                elif ')' == formula[start]:
+                    counter -= 1
+                    if not counter:
+                        return start
+                start += 1
+            return -1
+
         def helper(start: int, end: int, mult: int) -> None:
             name = []
             while start < end:
@@ -21,10 +33,10 @@ class Solution:
                         element = ''.join(name)
                         counter[element] += mult
                         name = []
-                    next = formula.rfind(')', start, end)
+                    next = findCloseParentheses(start, end)
                     local_mult = 0
                     cur = next + 1
-                    if cur > end or not formula[cur].isdigit():
+                    if cur >= end or not formula[cur].isdigit():
                         local_mult = 1
                     else:
                         while cur < end and formula[cur].isdigit():
