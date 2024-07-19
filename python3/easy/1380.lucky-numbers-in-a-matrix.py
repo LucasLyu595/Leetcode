@@ -7,7 +7,6 @@
 # @lc code=start
 class Solution:
     def luckyNumbers (self, matrix: List[List[int]]) -> List[int]:
-        used_row = set()
         n, m = len(matrix), len(matrix[0])
         ans = []
         for j in range(m):
@@ -17,9 +16,9 @@ class Solution:
                 if matrix[i][j] > ma:
                     ma = matrix[i][j]
                     row = i
-            if row not in used_row and matrix[row][j] == min(matrix[row]):
+            if matrix[row][j] == min(matrix[row]):
                 ans.append(matrix[row][j])
-                used_row.add(row)
+                return ans
         return ans
  
 # @lc code=end
