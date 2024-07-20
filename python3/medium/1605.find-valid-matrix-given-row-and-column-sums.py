@@ -7,40 +7,24 @@
 # @lc code=start
 class Solution:
     def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
-        n, m = len(rowSum), len(colSum)
-        ans = [[0] * m for _ in range(n)]
-        rowCur = [0] * n
-        colCur = [0] * m
-        for i in range(min(n, m)):
-            tmp = min(rowSum[i], colSum[i])
-            ans[i][i] = tmp
-            rowCur[i] = tmp
-            colCur[i] = tmp
-        for i in range(n):
-            if rowCur[i] == rowSum[i]:
-                continue
-            diff = rowSum[i] - rowCur[i]
-            j = 0
-            while diff and j < m:
-                tmp = min(diff, colSum[j] - colCur[j])
-                ans[i][j] += tmp
-                diff -= tmp
-                rowCur[i] += tmp
-                colCur[j] += tmp
-                j += 1
-        for j in range(m):
-            if colCur[j] == colSum[j]:
-                continue
-            diff = colSum[j] - colSum[j]
-            i = 0
-            while diff and i < n:
-                tmp = min(diff, rowSum[i] - rowCur[i])
-                ans[i][j] += tmp
-                diff -= tmp
-                rowCur[i] += tmp
-                colCur[j] += tmp
+        N = len(rowSum)
+        M = len(colSum)
+
+        orig_matrix = [[0] * M for _ in range(N)]
+        i, j = 0, 0
+
+        while i < N and j < M:
+            orig_matrix[i][j] = min(rowSum[i], colSum[j])
+
+            rowSum[i] -= orig_matrix[i][j]
+            colSum[j] -= orig_matrix[i][j]
+
+            if rowSum[i] == 0:
                 i += 1
-        return ans
+            else:
+                j += 1
+
+        return orig_matrix
 
 # @lc code=end
 
