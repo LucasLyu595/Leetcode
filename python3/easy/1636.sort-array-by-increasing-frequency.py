@@ -5,23 +5,13 @@
 #
 
 # @lc code=start
-from collections import Counter, defaultdict
-import heapq
+from collections import Counter
 
 
 class Solution:
     def frequencySort(self, nums: List[int]) -> List[int]:
-        counter = Counter(nums)
-        frequency_map = defaultdict(list)
-        for num in counter:
-            heapq.heappush(frequency_map[counter[num]], -num)
-        ans = []
-        for frequency in sorted(frequency_map.keys()):
-            while frequency_map[frequency]:
-                num = -heapq.heappop(frequency_map[frequency])
-                for _ in range(frequency):
-                    ans.append(num)
-        return ans
+        freq = Counter(nums)
+        return sorted(nums, key=lambda x: (freq[x], -x))
 
         
 # @lc code=end
