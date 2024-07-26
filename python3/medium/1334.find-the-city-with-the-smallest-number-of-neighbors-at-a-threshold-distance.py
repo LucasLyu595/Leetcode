@@ -12,6 +12,7 @@ class Solution:
     def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
         graph = defaultdict(list)
         dis = [[inf] * n for _ in range(n)]
+        reachable = defaultdict(set)
         for u, v, weight in edges:
             if weight > distanceThreshold:
                 continue
@@ -19,25 +20,28 @@ class Solution:
             graph[v].append(u)
             dis[u][v] = weight
             dis[v][u] = weight
+            reachable[u].add(v)
+            reachable[v].add(u)
 
 
         ans, min_num = 0, n
         for i in range(n):
-            next = deque(graph[i])
-            reachable = set(next)
+            next = deque(reachable[i])
             while next:
                 cur = next.popleft()
                 for neighbor in graph[cur]:
-                    if neighbor == i:
+                    if neighbor <= i:
                         continue
                     tmp_dis = dis[i][cur] + dis[cur][neighbor]
                     if tmp_dis > distanceThreshold:
                         continue
                     if dis[i][neighbor] > tmp_dis:
                         dis[i][neighbor] = tmp_dis
-                        reachable.add(neighbor)
+                        dis[neighbor][i] = tmp_dis
+                        reachable[i].add(neighbor)
+                        reachable[neighbor].add(i)
                         next.append(neighbor)
-            num = len(reachable)
+            num = len(reachable[i])
             if num <= min_num:
                 min_num = num
                 ans = i
