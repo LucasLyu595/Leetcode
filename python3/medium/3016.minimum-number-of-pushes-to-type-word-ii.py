@@ -5,22 +5,17 @@
 #
 
 # @lc code=start
-from collections import Counter
-
-
 class Solution:
     def minimumPushes(self, word: str) -> int:
-        counter = Counter(word)
-        hit = 1
-        num = 8
-        ans = 0
-        for count in sorted(counter.values(), key=lambda x: -x):
-            num -= 1
-            if num < 0:
-                num = 7
-                hit += 1
-            ans += count * hit
-        return ans
+        l=[0]*(32)
+        for i in range(26):
+            l[i]=word.count(chr(97+i))
+        l.sort(reverse=True)
+        res=0
+        for i in range(4):
+            for j in range(8):
+                res+=(i+1)*l[8*i+j]
+        return res
         
 # @lc code=end
 
