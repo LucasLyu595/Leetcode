@@ -5,54 +5,38 @@
 #
 
 # @lc code=start
-from collections import deque
-
-
 class Solution:
+    # Dictionary to store words for numbers
+    number_to_words_map = {
+        1000000000: "Billion", 1000000: "Million", 1000: "Thousand",
+        100: "Hundred", 90: "Ninety", 80: "Eighty", 70: "Seventy",
+        60: "Sixty", 50: "Fifty", 40: "Forty", 30: "Thirty",
+        20: "Twenty", 19: "Nineteen", 18: "Eighteen", 17: "Seventeen",
+        16: "Sixteen", 15: "Fifteen", 14: "Fourteen", 13: "Thirteen",
+        12: "Twelve", 11: "Eleven", 10: "Ten", 9: "Nine", 8: "Eight",
+        7: "Seven", 6: "Six", 5: "Five", 4: "Four", 3: "Three",
+        2: "Two", 1: "One"
+    }
+
     def numberToWords(self, num: int) -> str:
-
-        def threeDigits(num: int) -> str:
-            ans = deque()
-            if num:
-                two_digit = num % 100
-                if 0 < two_digit < 20:
-                    ans.appendleft(one[two_digit])
-                    num //= 100
-                else:
-                    digit = num % 10
-                    num //= 10
-                    if digit:
-                        ans.appendleft(one[digit])
-                    if num:
-                        digit = num % 10
-                        num //= 10
-                        if digit:
-                            ans.appendleft(ten[digit])
-            if num:
-                ans.appendleft("Hundred")
-                ans.appendleft(one[num])
-            return " ".join(ans)
-
-        units = ["Billion", "Million", "Thousand", ""]
-        one = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
-        ten = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
-        ans = []
-        while num:
-            three = num % 1000
-            num //= 1000
-            unit = units.pop()
-            if unit:
-                ans.append(unit)
-            three_digits = threeDigits(three)
-            if three_digits:
-                ans.append(threeDigits(three))
-            elif ans:
-                ans.pop()
-        word = " ".join(ans[::-1])
-        if not word:
+        if num == 0:
             return "Zero"
-        return word
 
+        for value, word in self.number_to_words_map.items():
+            # Check if the number is greater than or equal to the current unit
+            if num >= value:
+                # Convert the quotient to words if the current unit is 100 or greater
+                prefix = (self.numberToWords(num // value) + " ") if num >= 100 else ""
+
+                # Get the word for the current unit
+                unit = word
+
+                # Convert the remainder to words if it's not zero
+                suffix = "" if num % value == 0 else " " + self.numberToWords(num % value)
+
+                return prefix + unit + suffix
+
+        return ""
 
         
 # @lc code=end
