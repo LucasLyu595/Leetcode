@@ -6,31 +6,29 @@
 
 # @lc code=start
 from collections import defaultdict
+import heapq
 
 
 class Solution:
     def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start_node: int, end_node: int) -> float:
-        graph = [[0] * n for _ in range(n)]
+        graph = [0] * n
         neighbors = defaultdict(list)
         for i, (u, v) in enumerate(edges):
-            neighbors[u].append(v)
-            neighbors[v].append(u)
-            graph[u][v] = succProb[i]
-            graph[v][u] = succProb[i]
-        frontier = neighbors[start_node][:]
-        while frontier:
-            next = []
-            while frontier:
-                cur = frontier.pop(0)
-                for neighbor in neighbors[cur]:
-                    if start_node == neighbor:
-                        continue
-                    tmp_prob = graph[start_node][cur] * graph[cur][neighbor]
-                    if tmp_prob > graph[start_node][neighbor]:
-                        graph[start_node][neighbor] = tmp_prob
-                        next.append(neighbor)
-            frontier = next
-        return graph[start_node][end_node]
+            neighbors[u].append((v, succProb[i]))
+            neighbors[v].append((u, succProb[i]))
+        graph[start_node] = 1
+        pq = [(-1, start_node)]
+        while pq:
+            prob, cur = heapq.heappop(pq)
+            if cur == end_node:
+                return -prob
+            for neighbor, n_prob in neighbors[cur]:
+                tmp_prob = -prob * n_prob
+                if tmp_prob > graph[neighbor]:
+                    graph[neighbor] = tmp_prob
+                    heapq.heappush(pq, (-tmp_prob, neighbor))
+        return 0
+
 
 # @lc code=end
 
