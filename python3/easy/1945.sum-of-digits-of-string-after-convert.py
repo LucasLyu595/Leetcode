@@ -12,13 +12,13 @@ class Solution:
     def getLucky(self, s: str, k: int) -> int:
         map = {c : str(i + 1) for i, c in enumerate(ascii_lowercase)}
 
-        def operate(s: str) -> int:
-            return sum(int(c) for c in s)
+        def operate(num: int) -> int:
+            return sum(int(c) for c in str(num))
         
-        num = ''.join(map[c] for c in s)
+        num = int(''.join(map[c] for c in s))
         for _ in range(k):
-            num = str(operate(num))
-        return int(num)
+            num = operate(num)
+        return num
 
 # @lc code=end
 
