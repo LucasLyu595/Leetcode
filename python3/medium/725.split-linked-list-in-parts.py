@@ -12,43 +12,26 @@
 #         self.next = next
 class Solution:
     def splitListToParts(self, head: Optional[ListNode], k: int) -> List[Optional[ListNode]]:
-        tails = [None] * k
-        i = 0
-        cur = head
-        while cur and i < k:
-            tails[i] = cur
-            i += 1
-            cur = cur.next
+        length, curr = 0, head
+        while curr:
+            curr = curr.next
+            length += 1
 
-        def nextX(node: Optional[ListNode], x: int) -> Optional[ListNode]:
-            while node and x:
-                node = node.next
-                x -= 1
-            if x:
-                return None
-            return node
+        sizes, rm = [length // k] * k, length % k
+        for i in range(rm):
+            sizes[i] += 1
 
-        cur = nextX(tails[-1], k)
-        while cur:
-            tails[-1] = cur
-            for i in range(k - 1):
-                tails[i] = nextX(tails[i], i + 1)
-            cur = nextX(tails[-1], k)
-        cur = tails[-1]
-        i = 0
-        while cur and cur.next:
-            for j in range(i, k):
-                tails[j] = tails[j].next
-            cur = tails[-1]
-            i += 1
-        ans = [head]
-        for i in range(k - 1):
-            if tails[i]:
-                ans.append(tails[i].next)
-                tails[i].next = None
-            else:
-                ans.append(None)
-        return ans
+        res = []
+        curr = head
+        for size in sizes:
+            if not size:
+                res.append(None)
+                continue
+            res.append(curr)
+            for i in range(size-1):
+                curr = curr.next
+            curr.next, curr = None, curr.next
+        return res
 
 
 # @lc code=end
