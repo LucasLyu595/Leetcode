@@ -10,31 +10,14 @@ import heapq
 
 class Solution:
     def minAvailableDuration(self, slots1: List[List[int]], slots2: List[List[int]], duration: int) -> List[int]:
-        def processSlots(slots: List[List[int]]) -> List[int]:
-            nonlocal duration
-            ans = []
-            for s, e in slots:
-                if e - s < duration:
-                    continue
-                heapq.heappush(ans, (s, e))
-            return ans
-        
-        heap1, heap2 = processSlots(slots1), processSlots(slots2)
-        while heap1 and heap2:
-            if heap1[0][1] <= heap2[0][0]:
-                heapq.heappop(heap1)
-            elif heap1[0][0] >= heap2[0][1]:
-                heapq.heappop(heap2)
-            else:
-                start = max(heap1[0][0], heap2[0][0])
-                end = start + duration
-                if end <= min(heap1[0][1], heap2[0][1]):
-                    return [start, end]
-                else:
-                    if heap1[0][1] > heap2[0][1]:
-                        heapq.heappop(heap2)
-                    else:
-                        heapq.heappop(heap1)
+        timeslots = list(filter(lambda x: x[1] - x[0] >= duration, slots1 + slots2))
+        heapq.heapify(timeslots)
+
+        while len(timeslots) > 1:
+            start1, end1 = heapq.heappop(timeslots)
+            start2, end2 = timeslots[0]
+            if end1 >= start2 + duration:
+                return [start2, start2 + duration]
         return []
 
 
