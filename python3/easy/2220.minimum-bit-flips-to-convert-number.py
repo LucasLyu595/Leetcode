@@ -7,14 +7,7 @@
 # @lc code=start
 class Solution:
     def minBitFlips(self, start: int, goal: int) -> int:
-        ss, gs = bin(start)[2:][::-1], bin(goal)[2:][::-1]
-        ans = 0
-        for i in range(min(len(ss), len(gs))):
-            if ss[i] == gs[i]:
-                continue
-            ans += 1
-        ans += ss[len(gs):].count('1') + gs[len(ss):].count('1')
-        return ans
+        return bin(start ^ goal).count('1')
 
 # @lc code=end
 
