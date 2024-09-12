@@ -8,7 +8,15 @@
 class Solution:
     def countConsistentStrings(self, allowed: str, words: List[str]) -> int:
         allowed_set = set(allowed)
-        return sum(0 if set(word) - allowed_set else 1 for word in words)
+
+        def isConsistent(word: str) -> bool:
+            for c in word:
+                if c in allowed_set:
+                    continue
+                return False
+            return True
+
+        return sum(1 if isConsistent(word) else 0 for word in words)
         
 # @lc code=end
 
